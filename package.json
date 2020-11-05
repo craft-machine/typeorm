@@ -1,8 +1,8 @@
 {
-  "name": "typeorm",
+  "name": "@craft.co/typeorm-scoped",
   "private": true,
-  "version": "0.2.29",
-  "description": "Data-Mapper ORM for TypeScript, ES7, ES6, ES5. Supports MySQL, PostgreSQL, MariaDB, SQLite, MS SQL Server, Oracle, MongoDB databases.",
+  "version": "0.2.29-patch.0",
+  "description": "Forked version of TypeORM with support of resource scoping",
   "license": "MIT",
   "readmeFilename": "README.md",
   "author": {

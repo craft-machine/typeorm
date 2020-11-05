@@ -1,4 +1,5 @@
 import {Connection, SelectQueryBuilder} from "..";
+import { ScopeOptions } from '../decorator/Scope';
 import {OrderByCondition} from "../find-options/OrderByCondition";
 import {TableType} from "../metadata/types/TableTypes";
 
@@ -6,6 +7,12 @@ import {TableType} from "../metadata/types/TableTypes";
  * Arguments for TableMetadata class, helps to construct an TableMetadata object.
  */
 export interface TableMetadataArgs {
+
+    /**
+     * Metadata about scoping to be applied to
+     * the given table.
+     */
+    scope?: ScopeOptions;
 
     /**
      * Class to which table is applied.
