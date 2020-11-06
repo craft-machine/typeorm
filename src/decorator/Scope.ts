@@ -2,7 +2,7 @@ import { getMetadataArgsStorage, ObjectType } from "..";
 import { Connection } from "../connection/Connection";
 
 export type ScopeOptions = {
-    apply(sql: string): string;
+    apply(sql: string, scope: Object): string;
     enabled: boolean;
 };
 

@@ -57,6 +57,7 @@ export class SelectQueryBuilder<Entity>
 
     setScope(scope: Object) {
         this.scope = scope;
+        return this;
     }
 
     /**
@@ -73,7 +74,7 @@ export class SelectQueryBuilder<Entity>
 
             if (scope) {
                 if (scope.enabled) {
-                    scope.apply(rawQuery);
+                    scope.apply(rawQuery, this.scope);
                 } else if (scope.enabled === false) {
                     scope.enabled = true;
                 }
