@@ -220,7 +220,7 @@ export class PostgresQueryRunner extends BaseQueryRunner implements QueryRunner 
                         fail(new QueryFailedError(query, parameters, err));
                     } else {
                         if (Array.isArray(result)) {
-                            const queryResult = result.find(r => r.rowCount) || {};
+                            const queryResult = result.find(r => r.rowCount !== null) || {};
 
                             // May be undefined, but that's expected 
                             // and aligned with previous behavior

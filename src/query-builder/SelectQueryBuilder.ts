@@ -74,7 +74,7 @@ export class SelectQueryBuilder<Entity>
 
             if (scope) {
                 if (scope.enabled) {
-                    scope.apply(rawQuery, this.scope);
+                    rawQuery = scope.apply(rawQuery, this.scope);
                 } else if (scope.enabled === false) {
                     scope.enabled = true;
                 }
