@@ -39,7 +39,7 @@ export class DeleteQueryBuilder<Entity> extends QueryBuilder<Entity> implements 
     /**
      * Gets generated sql query without parameters being replaced.
      */
-    getQuery(): string {
+    getRawQuery(): string {
         let sql = this.createComment();
         sql += this.createDeleteExpression();
         return sql.trim();

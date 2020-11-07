@@ -45,46 +45,6 @@ import { EntityNotFoundError } from "../error/EntityNotFoundError";
 export class SelectQueryBuilder<Entity>
     extends QueryBuilder<Entity>
     implements WhereExpression {
-    /**
-     * Desired request scope, to be consumed
-     * by the @Scope decorator
-     */
-    public scope: Object;
-
-    // -------------------------------------------------------------------------
-    // Public Implemented Methods
-    // -------------------------------------------------------------------------
-
-    setScope(scope: Object) {
-        this.scope = scope;
-        return this;
-    }
-
-    /**
-     * Gets generated sql query without parameters being replaced.
-     */
-    getQuery(): string {
-        let rawQuery = this.getRawQuery();
-
-        this.expressionMap.aliases.forEach((table) => {
-            if (!table || !table.hasMetadata) return;
-
-            const metadata = table.metadata.tableMetadataArgs;
-            const scope = metadata.scope;
-
-            if (scope) {
-                if (scope.enabled) {
-                    rawQuery = scope.apply(rawQuery, this.scope);
-                } else if (scope.enabled === false) {
-                    scope.enabled = true;
-                }
-            }
-        });
-
-        if (this.expressionMap.subQuery) rawQuery = "(" + rawQuery + ")";
-
-        return rawQuery;
-    }
 
     /**
      * Gets generated sql query without parameters being replaced.

@@ -47,7 +47,7 @@ export class UpdateQueryBuilder<Entity> extends QueryBuilder<Entity> implements 
     /**
      * Gets generated sql query without parameters being replaced.
      */
-    getQuery(): string {
+    getRawQuery(): string {
         let sql = this.createComment();
         sql += this.createUpdateExpression();
         sql += this.createOrderByExpression();
