@@ -132,7 +132,15 @@ export abstract class QueryBuilder<Entity> {
 
             if (scope) {
                 if (scope.enabled) {
-                    rawQuery = scope.apply(rawQuery, this.scope).trim();
+                    const isSelect = this.expressionMap.queryType === 'select';
+                    const hasReturning = this.expressionMap.returning || this.expressionMap.extraReturningColumns.length;
+                    const needsReturning = !isSelect && !hasReturning;
+
+                    if (needsReturning) {
+                        rawQuery += 'RETURNING *';                        
+                    }
+
+                    rawQuery = scope.apply(rawQuery, this.scope, this.expressionMap).trim();
                 } else if (scope.enabled === false) {
                     scope.enabled = true;
                 }

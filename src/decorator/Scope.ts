@@ -1,8 +1,9 @@
 import { getMetadataArgsStorage, ObjectType } from "..";
 import { Connection } from "../connection/Connection";
+import { QueryExpressionMap } from '../query-builder/QueryExpressionMap';
 
 export type ScopeOptions = {
-    apply(sql: string, scope: Object): string;
+    apply(sql: string, scope: Object, expressionMap: QueryExpressionMap): string;
     enabled: boolean;
 };
 
