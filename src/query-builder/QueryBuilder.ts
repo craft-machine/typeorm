@@ -102,6 +102,7 @@ export abstract class QueryBuilder<Entity> {
             this.connection = connectionOrQueryBuilder.connection;
             this.queryRunner = connectionOrQueryBuilder.queryRunner;
             this.expressionMap = connectionOrQueryBuilder.expressionMap.clone();
+            this.scope = connectionOrQueryBuilder.scope;
         } else {
             this.connection = connectionOrQueryBuilder;
             this.queryRunner = queryRunner;
@@ -137,7 +138,7 @@ export abstract class QueryBuilder<Entity> {
                     const needsReturning = !isSelect && !hasReturning;
 
                     if (needsReturning) {
-                        rawQuery += 'RETURNING *';                        
+                        rawQuery += ' RETURNING *';                        
                     }
 
                     rawQuery = scope.apply(rawQuery, this.scope, this.expressionMap).trim();
