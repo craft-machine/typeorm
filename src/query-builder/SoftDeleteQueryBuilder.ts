@@ -43,7 +43,7 @@ export class SoftDeleteQueryBuilder<Entity> extends QueryBuilder<Entity> impleme
     /**
      * Gets generated sql query without parameters being replaced.
      */
-    getQuery(): string {
+    getRawQuery(): string {
         let sql = this.createUpdateExpression();
         sql += this.createOrderByExpression();
         sql += this.createLimitExpression();

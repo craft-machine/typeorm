@@ -219,14 +219,22 @@ export class PostgresQueryRunner extends BaseQueryRunner implements QueryRunner 
                         this.driver.connection.logger.logQueryError(err, query, parameters, this);
                         fail(new QueryFailedError(query, parameters, err));
                     } else {
-                        switch (result.command) {
+                        let queryResult = result;
+
+                        if (Array.isArray(result)) {
+                            // May be undefined, but that's expected 
+                            // and aligned with previous behavior
+                            queryResult = result.find(r => r.rowCount !== null) || {};
+                        }
+
+                        switch (queryResult.command) {
                             case "DELETE":
                             case "UPDATE":
                                 // for UPDATE and DELETE query additionally return number of affected rows
-                                ok([result.rows, result.rowCount]);
+                                ok([queryResult.rows, queryResult.rowCount]);
                                 break;
                             default:
-                                ok(result.rows);
+                                ok(queryResult.rows);
                         }
                     }
                 });
