@@ -799,6 +799,11 @@ export class EntityMetadata {
                 this.tableNameWithoutPrefix = shorten(this.tableNameWithoutPrefix, { separator: "_", segmentLength: 3 });
             }
         }
+
+        if (this.tableMetadataArgs.type === 'entity-child') {
+            this.tableMetadataArgs.scope = this.parentEntityMetadata.tableMetadataArgs.scope;
+        }
+        
         this.tableName = entityPrefix ? namingStrategy.prefixTableName(entityPrefix, this.tableNameWithoutPrefix) : this.tableNameWithoutPrefix;
         this.target = this.target ? this.target : this.tableName;
         this.name = this.targetName ? this.targetName : this.tableName;

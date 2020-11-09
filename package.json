@@ -1,7 +1,7 @@
 {
   "name": "@craft.co/typeorm-scoped",
-  "private": true,
-  "version": "0.2.29-patch.0",
+  "private": false,
+  "version": "0.2.29-patch.2",
   "description": "Forked version of TypeORM with support of resource scoping",
   "license": "MIT",
   "readmeFilename": "README.md",
