@@ -14,6 +14,7 @@ import {InsertResult} from "../query-builder/result/InsertResult";
 import {QueryDeepPartialEntity} from "../query-builder/QueryPartialEntity";
 import {ObjectID} from "../driver/mongodb/typings";
 import {FindConditions} from "../find-options/FindConditions";
+import {UpsertOptions} from "./UpsertOptions";
 
 /**
  * Repository is supposed to work with your entity objects. Find entities, insert, update, delete, etc.
@@ -44,7 +45,7 @@ export class Repository<Entity extends ObjectLiteral> {
     // -------------------------------------------------------------------------
 
     /**
-     * Creates a new query builder that can be used to build a sql query.
+     * Creates a new query builder that can be used to build a SQL query.
      */
     createQueryBuilder(alias?: string, queryRunner?: QueryRunner): SelectQueryBuilder<Entity> {
         return this.manager.createQueryBuilder<Entity>(this.metadata.target as any, alias || this.metadata.targetName, queryRunner || this.queryRunner);
@@ -80,14 +81,14 @@ export class Repository<Entity extends ObjectLiteral> {
     create(): Entity;
 
     /**
-     * Creates a new entities and copies all entity properties from given objects into their new entities.
-     * Note that it copies only properties that present in entity schema.
+     * Creates new entities and copies all entity properties from given objects into their new entities.
+     * Note that it copies only properties that are present in entity schema.
      */
     create(entityLikeArray: DeepPartial<Entity>[]): Entity[];
 
     /**
      * Creates a new entity instance and copies all entity properties from this object into a new entity.
-     * Note that it copies only properties that present in entity schema.
+     * Note that it copies only properties that are present in entity schema.
      */
     create(entityLike: DeepPartial<Entity>): Entity;
 
@@ -239,6 +240,17 @@ export class Repository<Entity extends ObjectLiteral> {
      */
     update(criteria: string|string[]|number|number[]|Date|Date[]|ObjectID|ObjectID[]|FindConditions<Entity>, partialEntity: QueryDeepPartialEntity<Entity>): Promise<UpdateResult> {
         return this.manager.update(this.metadata.target as any, criteria as any, partialEntity);
+    }
+
+    /**
+     * Inserts a given entity into the database, unless a unique constraint conflicts then updates the entity
+     * Unlike save method executes a primitive operation without cascades, relations and other operations included.
+     * Executes fast and efficient INSERT ... ON CONFLICT DO UPDATE/ON DUPLICATE KEY UPDATE query.
+     */
+    upsert(
+        entityOrEntities: QueryDeepPartialEntity<Entity> | (QueryDeepPartialEntity<Entity>[]),
+        conflictPathsOrOptions: string[] | UpsertOptions<Entity>): Promise<InsertResult> {
+        return this.manager.upsert(this.metadata.target as any, entityOrEntities, conflictPathsOrOptions);
     }
 
     /**

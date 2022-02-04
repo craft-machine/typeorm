@@ -4,7 +4,7 @@ import { ConnectionOptionsReader } from "../../../src/connection/ConnectionOptio
 import { importClassesFromDirectories } from "../../../src/util/DirectoryExportedClassesLoader";
 import { LoggerFactory } from "../../../src/logger/LoggerFactory";
 
-describe("cli support for cjs extension", () => {
+describe("github issues > #6284 cli support for cjs extension", () => {
     it("will load a cjs file", async  () => {
         const cjsConfigPath = [__dirname, "ormconfig.cjs"].join("/");
         const databaseType = "postgres";
@@ -22,12 +22,12 @@ describe("cli support for cjs extension", () => {
         unlinkSync(cjsConfigPath);
     });
 
-    it("loads cjs files via DirectoryExportedClassesloader", () => {
+    it("loads cjs files via DirectoryExportedClassesloader", async () => {
         const klassPath = [__dirname, "klass.cjs"].join("/");
         const klass = `module.exports.Widget = class Widget {};`;
         writeFileSync(klassPath, klass);
 
-        const classes = importClassesFromDirectories(new LoggerFactory().create(), [`${__dirname}/*.cjs`]);
+        const classes = await importClassesFromDirectories(new LoggerFactory().create(), [`${__dirname}/*.cjs`]);
         expect(classes).to.be.an("Array");
         expect(classes.length).to.eq(1);
 

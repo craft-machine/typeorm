@@ -13,7 +13,7 @@
 userRepository.find({ select: ["firstName", "lastName"] });
 ```
 
--   `relations` - 关系需要加载主体。 也可以加载子关系（join 和 leftJoinAndSelect 的简写）
+-   `relations` - 关系需要加载主体。 也可以加载子关系（`join` 和 `leftJoinAndSelect` 的简写）
 
 ```typescript
 userRepository.find({ relations: ["profile", "photos", "videos"] });
@@ -259,6 +259,22 @@ const loadedPosts = await connection.getRepository(Post).find({
 
 ```sql
 SELECT * FROM "post" WHERE "title" LIKE '%out #%'
+```
+
+-   `ILike`
+
+```ts
+import { ILike } from "typeorm";
+
+const loadedPosts = await connection.getRepository(Post).find({
+    title: ILike("%out #%")
+});
+```
+
+将执行以下查询：
+
+```sql
+SELECT * FROM "post" WHERE "title" ILIKE '%out #%'
 ```
 
 -   `Between`
