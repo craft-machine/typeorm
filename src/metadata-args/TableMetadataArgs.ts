@@ -1,5 +1,5 @@
 import {Connection, SelectQueryBuilder} from "..";
-import { ScopeOptions } from '../decorator/Scope';
+import { ScopeOptions } from "../decorator/Scope";
 import {OrderByCondition} from "../find-options/OrderByCondition";
 import {TableType} from "../metadata/types/TableTypes";
 

@@ -800,7 +800,7 @@ export class EntityMetadata {
             }
         }
 
-        if (this.tableMetadataArgs.type === 'entity-child') {
+        if (this.tableMetadataArgs.type === "entity-child") {
             this.tableMetadataArgs.scope = this.parentEntityMetadata.tableMetadataArgs.scope;
         }
         
