@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import {plainToClass} from "class-transformer";
+import { plainToClass } from "class-transformer";
 
 import {Photo} from "./entity/Photo";
 import {User} from "./entity/User";
