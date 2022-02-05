@@ -25,6 +25,7 @@ import {ReplicationMode} from "../types/ReplicationMode";
 import {VersionUtils} from "../../util/VersionUtils";
 import {TypeORMError} from "../../error";
 import {MetadataTableType} from "../types/MetadataTableType";
+import { QueryResult } from "../../query-runner/QueryResult";
 
 /**
  * Runs queries on a single postgres database connection.
@@ -198,54 +199,55 @@ export class PostgresQueryRunner extends BaseQueryRunner implements QueryRunner 
     /**
      * Executes a given SQL query.
      */
-    async query(query: string, parameters?: any[], useStructuredResult: boolean = false): Promise<any> {
+     async query(query: string, parameters?: any[], useStructuredResult: boolean = false): Promise<any> {
         if (this.isReleased)
             throw new QueryRunnerAlreadyReleasedError();
 
-        return new Promise<any[]>(async (ok, fail) => {
-            try {
-                const databaseConnection = await this.connect();
-                this.driver.connection.logger.logQuery(query, parameters, this);
-                const queryStartTime = +new Date();
+        const databaseConnection = await this.connect();
 
-                databaseConnection.query(query, parameters, (err: any, result: any) => {
-                    // log slow queries if maxQueryExecution time is set
-                    const maxQueryExecutionTime = this.driver.connection.options.maxQueryExecutionTime;
-                    const queryEndTime = +new Date();
-                    const queryExecutionTime = queryEndTime - queryStartTime;
-                    if (maxQueryExecutionTime && queryExecutionTime > maxQueryExecutionTime)
-                        this.driver.connection.logger.logQuerySlow(queryExecutionTime, query, parameters, this);
+        this.driver.connection.logger.logQuery(query, parameters, this);
+        try {
+            const queryStartTime = +new Date();
+            const raw = await databaseConnection.query(query, parameters);
+            // log slow queries if maxQueryExecution time is set
+            const maxQueryExecutionTime = this.driver.options.maxQueryExecutionTime;
+            const queryEndTime = +new Date();
+            const queryExecutionTime = queryEndTime - queryStartTime;
+            if (maxQueryExecutionTime && queryExecutionTime > maxQueryExecutionTime)
+                this.driver.connection.logger.logQuerySlow(queryExecutionTime, query, parameters, this);
 
-                    if (err) {
-                        this.driver.connection.logger.logQueryError(err, query, parameters, this);
-                        fail(new QueryFailedError(query, parameters, err));
-                    } else {
-                        let queryResult = result;
+            const result = new QueryResult();
+            if (raw) {
+                if (raw.hasOwnProperty("rows")) {
+                    result.records = raw.rows;
+                }
 
-                        if (Array.isArray(result)) {
-                            // May be undefined, but that's expected 
-                            // and aligned with previous behavior
-                            queryResult = result.find(r => r.rowCount !== null) || {};
-                        }
+                if (raw.hasOwnProperty("rowCount")) {
+                    result.affected = raw.rowCount;
+                }
 
-                        switch (queryResult.command) {
-                            case "DELETE":
-                            case "UPDATE":
-                                // for UPDATE and DELETE query additionally return number of affected rows
-                                ok([queryResult.rows, queryResult.rowCount]);
-                                break;
-                            default:
-                                ok(queryResult.rows);
-                        }
-                    }
-                });
+                switch (raw.command) {
+                    case "DELETE":
+                    case "UPDATE":
+                        // for UPDATE and DELETE query additionally return number of affected rows
+                        result.raw = [raw.rows, raw.rowCount];
+                        break;
+                    default:
+                        result.raw = raw.rows;
+                }
+
+                if (!useStructuredResult) {
+                    return result.raw;
+                }
             }
-         catch (err) {
+
+            return result;
+        } catch (err) {
             this.driver.connection.logger.logQueryError(err, query, parameters, this);
             throw new QueryFailedError(query, parameters, err);
         }
-    });
-}
+    }
+
 
     /**
      * Returns raw data stream.
