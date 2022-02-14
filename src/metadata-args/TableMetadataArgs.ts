@@ -1,5 +1,5 @@
 import {Connection, SelectQueryBuilder} from "..";
-import { ScopeOptions } from '../decorator/Scope';
+import { ScopeOptions } from "../decorator/Scope";
 import {OrderByCondition} from "../find-options/OrderByCondition";
 import {TableType} from "../metadata/types/TableTypes";
 
@@ -64,13 +64,18 @@ export interface TableMetadataArgs {
     expression?: string|((connection: Connection) => SelectQueryBuilder<any>);
 
     /**
+     * View dependencies.
+     */
+    dependsOn?: Set<Function|string>;
+
+    /**
      * Indicates if view is materialized
      */
     materialized?: boolean;
 
      /**
      * If set to 'true' this option disables Sqlite's default behaviour of secretly creating
-     * an integer primary key column named 'rowid' on table creation. 
+     * an integer primary key column named 'rowid' on table creation.
      */
-    withoutRowid?: boolean;   
+    withoutRowid?: boolean;
 }

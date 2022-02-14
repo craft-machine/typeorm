@@ -24,7 +24,7 @@ import {createConnection} from "typeorm";
 const connection = await createConnection();
 ```
 
-Supported ormconfig file formats are: `.json`, `.js`, `.env`, `.yml` and `.xml`.
+Supported ormconfig file formats are: `.json`, `.js`, `.ts`, `.env`, `.yml` and `.xml`.
 
 ## Using `ormconfig.json`
 
@@ -134,6 +134,7 @@ List of available env variables you can set:
 * TYPEORM_MIGRATIONS_DIR
 * TYPEORM_MIGRATIONS_RUN
 * TYPEORM_MIGRATIONS_TABLE_NAME
+* TYPEORM_METADATA_TABLE_NAME
 * TYPEORM_PASSWORD
 * TYPEORM_PORT
 * TYPEORM_SCHEMA
@@ -145,7 +146,15 @@ List of available env variables you can set:
 * TYPEORM_USERNAME
 * TYPEORM_UUID_EXTENSION
 
-`TYPEORM_CACHE` should be boolean or string of cache type
+`TYPEORM_CACHE` should be boolean or string of cache type.
+Here is an example of how you can setup a `redis` cache.
+
+```
+TYPEORM_CACHE=redis # other valid values: a boolean or ioredis or database
+TYPEORM_CACHE_ALWAYS_ENABLED=true
+TYPEORM_CACHE_DURATION=30000 # in milliseconds
+TYPEORM_CACHE_OPTIONS={"host":"localhost","port":6379}
+```
 
 `ormconfig.env` should be used only during development.
 On production you can set all these values in real ENVIRONMENT VARIABLES.

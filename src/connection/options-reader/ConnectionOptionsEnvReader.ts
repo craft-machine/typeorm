@@ -34,6 +34,7 @@ export class ConnectionOptionsEnvReader {
             entities: this.stringToArray(PlatformTools.getEnvVariable("TYPEORM_ENTITIES")),
             migrations: this.stringToArray(PlatformTools.getEnvVariable("TYPEORM_MIGRATIONS")),
             migrationsTableName: PlatformTools.getEnvVariable("TYPEORM_MIGRATIONS_TABLE_NAME"),
+            metadataTableName: PlatformTools.getEnvVariable("TYPEORM_METADATA_TABLE_NAME"),
             subscribers: this.stringToArray(PlatformTools.getEnvVariable("TYPEORM_SUBSCRIBERS")),
             logging: this.transformLogging(PlatformTools.getEnvVariable("TYPEORM_LOGGING")),
             logger: PlatformTools.getEnvVariable("TYPEORM_LOGGER"),
@@ -75,7 +76,7 @@ export class ConnectionOptionsEnvReader {
             return true;
         if (caching === "false" || caching === "FALSE" || caching === "0")
             return false;
-        if (caching === "redis" || caching === "database")
+        if (caching === "redis" || caching === "ioredis" || caching === "database")
             return {
                 type: caching,
                 options: PlatformTools.getEnvVariable("TYPEORM_CACHE_OPTIONS") ? JSON.parse(PlatformTools.getEnvVariable("TYPEORM_CACHE_OPTIONS")) : undefined,

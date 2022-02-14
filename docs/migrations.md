@@ -42,13 +42,13 @@ You have thousands of posts in your database.
 Now you need to make a new release and rename `title` to `name`.
 What would you do?
 
-You need to create a new migration with the following sql query (postgres dialect):
+You need to create a new migration with the following SQL query (postgres dialect):
 
 ```sql
 ALTER TABLE "post" ALTER COLUMN "title" RENAME TO "name";
 ```
 
-Once you run this sql query your database schema is ready to work with your new codebase.
+Once you run this SQL query your database schema is ready to work with your new codebase.
 TypeORM provides a place where you can write such sql queries and run them when needed.
 This place is called "migrations".
 
@@ -144,11 +144,21 @@ Once you have a migration to run on production, you can run them using a CLI com
 typeorm migration:run
 ```
 
-**`typeorm migration:create` and `typeorm migration:generate` will create `.ts` files. The `migration:run` and `migration:revert` commands only work on `.js` files. Thus the typescript files need to be compiled before running the commands.** Alternatively you can use `ts-node` in conjunction with `typeorm` to run `.ts` migration files.
+**`typeorm migration:create` and `typeorm migration:generate` will create `.ts` files, unless you use the `o` flag (see more in [Generating migrations](#generating-migrations)). The `migration:run` and `migration:revert` commands only work on `.js` files. Thus the typescript files need to be compiled before running the commands.** Alternatively you can use `ts-node` in conjunction with `typeorm` to run `.ts` migration files.
 
 Example with `ts-node`:
 ```
-ts-node ./node_modules/typeorm/cli.js migration:run
+ts-node --transpile-only ./node_modules/typeorm/cli.js migration:run
+```
+
+Example with `ts-node` in ESM projects:
+```
+node --loader ts-node/esm ./node_modules/typeorm/cli.js migration:run
+```
+
+Example `ts-node` not using `node_modules` directly:
+```
+ts-node $(yarn bin typeorm) migration:run
 ```
 
 This command will execute all pending migrations and run them in a sequence ordered by their timestamps.
@@ -194,13 +204,40 @@ export class PostRefactoringTIMESTAMP implements MigrationInterface {
 }
 ```
 
+Alternatively you can also output your migrations as Javascript files using the `o` (alias for `--outputJs`) flag. This is useful for Javascript only projects in which TypeScript additional packages are not installed. This command, will generate a new migration file `{TIMESTAMP}-PostRefactoring.js` with the following content:
+
+```javascript
+const { MigrationInterface, QueryRunner } = require("typeorm");
+
+module.exports = class PostRefactoringTIMESTAMP {
+
+    async up(queryRunner) {
+        await queryRunner.query(`ALTER TABLE "post" ALTER COLUMN "title" RENAME TO "name"`);
+    }
+
+    async down(queryRunner) {
+        await queryRunner.query(`ALTER TABLE "post" ALTER COLUMN "title" RENAME TO "name"`);
+    }
+}
+```
+
 See, you don't need to write the queries on your own.
-The rule of thumb for generating migrations is that you generate them after "each" change you made to your models. To apply multi-line formatting to your generated migration queries, use the `p` (alias for `--pretty`) flag.
+The rule of thumb for generating migrations is that you generate them after **each** change you made to your models. To apply multi-line formatting to your generated migration queries, use the `p` (alias for `--pretty`) flag.
 
 ## Connection option
 If you need to run/revert your migrations for another connection rather than the default, use the `-c` (alias for `--connection`) and pass the config name as an argument
 ```
 typeorm -c <your-config-name> migration:{run|revert}
+```
+
+## Timestamp option
+If you need to specify a timestamp for the migration name, use the `-t` (alias for `--timestamp`) and pass the timestamp (should be a non-negative number)
+```
+typeorm -t <specific-timestamp> migration:{create|generate}
+```
+You can get a timestamp from:
+```js
+Date.now(); /* OR */ new Date().getTime();
 ```
 
 ## Using migration API to write migrations
@@ -269,10 +306,10 @@ export class QuestionRefactoringTIMESTAMP implements MigrationInterface {
     }
 
     async down(queryRunner: QueryRunner): Promise<void> {
-        const table = await queryRunner.getTable("question");
+        const table = await queryRunner.getTable("answer");
         const foreignKey = table.foreignKeys.find(fk => fk.columnNames.indexOf("questionId") !== -1);
-        await queryRunner.dropForeignKey("question", foreignKey);
-        await queryRunner.dropColumn("question", "questionId");
+        await queryRunner.dropForeignKey("answer", foreignKey);
+        await queryRunner.dropColumn("answer", "questionId");
         await queryRunner.dropTable("answer");
         await queryRunner.dropIndex("question", "IDX_QUESTION_NAME");
         await queryRunner.dropTable("question");
@@ -518,11 +555,11 @@ Drops a column in the table.
 ---
 
 ```ts
-dropColumns(table: Table|string, columns: TableColumn[]): Promise<void>
+dropColumns(table: Table|string, columns: TableColumn[]|string[]): Promise<void>
 ```
 
 - `table` - Table object or name
-- `columns` - array of TableColumn objects to be dropped
+- `columns` - array of TableColumn objects or column names to be dropped
 
 Drops a columns in the table.
 

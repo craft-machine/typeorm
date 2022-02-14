@@ -8,6 +8,7 @@ import {expect} from "chai";
 import {PostWithoutVersionAndUpdateDate} from "./entity/PostWithoutVersionAndUpdateDate";
 import {PostWithUpdateDate} from "./entity/PostWithUpdateDate";
 import {PostWithVersionAndUpdatedDate} from "./entity/PostWithVersionAndUpdatedDate";
+import {Post} from "./entity/Post";
 import {OptimisticLockVersionMismatchError} from "../../../../src/error/OptimisticLockVersionMismatchError";
 import {OptimisticLockCanNotBeUsedError} from "../../../../src/error/OptimisticLockCanNotBeUsedError";
 import {NoVersionOrUpdateDateColumnError} from "../../../../src/error/NoVersionOrUpdateDateColumnError";
@@ -29,8 +30,17 @@ describe("repository > find options > locking", () => {
     after(() => closeTestingConnections(connections));
 
     it("should throw error if pessimistic lock used without transaction", () => Promise.all(connections.map(async connection => {
-        if (connection.driver instanceof AbstractSqliteDriver || connection.driver instanceof CockroachDriver || connection.driver instanceof SapDriver)
+        if (connection.driver instanceof AbstractSqliteDriver || connection.driver instanceof SapDriver)
             return;
+
+        if (connection.driver instanceof CockroachDriver) {
+            return Promise.all([
+                connection
+                    .getRepository(PostWithVersion)
+                    .findOne(1, { lock: { mode: "pessimistic_write" } })
+                    .should.be.rejectedWith(PessimisticLockTransactionRequiredError),
+            ]);
+        }
 
         return Promise.all([
             connection
@@ -46,8 +56,19 @@ describe("repository > find options > locking", () => {
     })));
 
     it("should not throw error if pessimistic lock used with transaction", () => Promise.all(connections.map(async connection => {
-        if (connection.driver instanceof AbstractSqliteDriver || connection.driver instanceof CockroachDriver || connection.driver instanceof SapDriver)
+        if (connection.driver instanceof AbstractSqliteDriver || connection.driver instanceof SapDriver)
             return;
+
+        if (connection.driver instanceof CockroachDriver) {
+            return connection.manager.transaction(entityManager => {
+                return Promise.all([
+                    entityManager
+                        .getRepository(PostWithVersion)
+                        .findOne(1, { lock: { mode: "pessimistic_write" } })
+                        .should.not.be.rejected
+                ]);
+            });
+        }
 
         return connection.manager.transaction(entityManager => {
             return Promise.all([
@@ -72,7 +93,7 @@ describe("repository > find options > locking", () => {
 
         await connection.manager.transaction(entityManager => {
             const originalQuery = entityManager.queryRunner!.query.bind(entityManager.queryRunner);
-            entityManager.queryRunner!.query = (...args) => {
+            entityManager.queryRunner!.query = (...args: any[]) => {
                 executedSql.push(args[0]);
                 return originalQuery(...args);
             };
@@ -97,15 +118,36 @@ describe("repository > find options > locking", () => {
 
     })));
 
-    it("should attach pessimistic write lock statement on query if locking enabled", () => Promise.all(connections.map(async connection => {
-        if (connection.driver instanceof AbstractSqliteDriver || connection.driver instanceof CockroachDriver || connection.driver instanceof SapDriver)
+    it("should attach for no key update lock statement on query if locking enabled", () => Promise.all(connections.map(async connection => {
+        if (!(connection.driver instanceof PostgresDriver))
             return;
 
         const executedSql: string[] = [];
 
         await connection.manager.transaction(entityManager => {
             const originalQuery = entityManager.queryRunner!.query.bind(entityManager.queryRunner);
-            entityManager.queryRunner!.query = (...args) => {
+            entityManager.queryRunner!.query = (...args: any[]) => {
+                executedSql.push(args[0]);
+                return originalQuery(...args);
+            };
+
+            return entityManager
+                .getRepository(PostWithVersion)
+                .findOne(1, { lock: { mode: "for_no_key_update" } });
+        });
+
+        expect(executedSql.join(" ").includes("FOR NO KEY UPDATE")).to.be.true;
+    })));
+
+    it("should attach pessimistic write lock statement on query if locking enabled", () => Promise.all(connections.map(async connection => {
+        if (connection.driver instanceof AbstractSqliteDriver || connection.driver instanceof SapDriver)
+            return;
+
+        const executedSql: string[] = [];
+
+        await connection.manager.transaction(entityManager => {
+            const originalQuery = entityManager.queryRunner!.query.bind(entityManager.queryRunner);
+            entityManager.queryRunner!.query = (...args: any[]) => {
                 executedSql.push(args[0]);
                 return originalQuery(...args);
             };
@@ -131,7 +173,7 @@ describe("repository > find options > locking", () => {
 
         await connection.manager.transaction(entityManager => {
             const originalQuery = entityManager.queryRunner!.query.bind(entityManager.queryRunner);
-            entityManager.queryRunner!.query = (...args) => {
+            entityManager.queryRunner!.query = (...args: any[]) => {
                 executedSql.push(args[0]);
                 return originalQuery(...args);
             };
@@ -250,7 +292,7 @@ describe("repository > find options > locking", () => {
     })));
 
     it("should throw error if pessimistic locking not supported by given driver", () => Promise.all(connections.map(async connection => {
-        if (connection.driver instanceof AbstractSqliteDriver || connection.driver instanceof CockroachDriver || connection.driver instanceof SapDriver)
+        if (connection.driver instanceof AbstractSqliteDriver || connection.driver instanceof SapDriver)
             return connection.manager.transaction(entityManager => {
                 return Promise.all([
                     entityManager
@@ -265,7 +307,132 @@ describe("repository > find options > locking", () => {
                 ]);
             });
 
+        if (connection.driver instanceof CockroachDriver)
+            return connection.manager.transaction(entityManager => {
+                return Promise.all([
+                    entityManager
+                        .getRepository(PostWithVersion)
+                        .findOne(1, { lock: { mode: "pessimistic_read" } })
+                        .should.be.rejectedWith(LockNotSupportedOnGivenDriverError),
+                ]);
+            });
+
         return;
+    })));
+
+    it("should not allow empty array for lockTables", () => Promise.all(connections.map(async connection => {
+        if (!(connection.driver instanceof PostgresDriver || connection.driver instanceof CockroachDriver))
+            return;
+
+        return connection.manager.transaction(entityManager => {
+            return Promise.all([
+                entityManager.getRepository(Post)
+                    .findOne({
+                        lock: {mode: "pessimistic_write", tables: []}
+                    }).should.be.rejectedWith("lockTables cannot be an empty array"),
+            ]);
+        });
+    })));
+
+    it("should throw error when specifying a table that is not part of the query", () => Promise.all(connections.map(async connection => {
+        if (!(connection.driver instanceof PostgresDriver || connection.driver instanceof CockroachDriver))
+            return;
+
+        return connection.manager.transaction(entityManager => {
+            return Promise.all([
+                entityManager.getRepository(Post)
+                    .findOne({
+                        relations: ["author"],
+                        lock: {mode: "pessimistic_write", tables: ["img"]}
+                    }).should.be.rejectedWith('"img" is not part of this query')
+            ]);
+        });
+    })));
+
+    it("should allow on a left join", () => Promise.all(connections.map(async connection => {
+        if (connection.driver instanceof CockroachDriver) {
+            return connection.manager.transaction(entityManager => {
+                return Promise.all([
+                    entityManager.getRepository(Post).findOne({
+                        relations: ["author"],
+                        lock: {mode: "pessimistic_write", tables: ["post"]}
+                    }),
+                    entityManager.getRepository(Post).findOne({
+                        relations: ["author"],
+                        lock: {mode: "pessimistic_write"}
+                    })
+                ]);
+            });
+        }
+
+        if (connection.driver instanceof PostgresDriver) {
+            return connection.manager.transaction(entityManager => {
+                return Promise.all([
+                    entityManager.getRepository(Post).findOne({
+                        relations: ["author"],
+                        lock: {mode: "pessimistic_write", tables: ["post"]}
+                    }),
+                    entityManager.getRepository(Post).findOne({
+                        relations: ["author"],
+                        lock: {mode: "pessimistic_write"}
+                    }).should.be.rejectedWith("FOR UPDATE cannot be applied to the nullable side of an outer join")
+                ]);
+            });
+        }
+
+        return;
+    })));
+
+    it("should allow using lockTables on all types of locking", () => Promise.all(connections.map(async connection => {
+        if (!(connection.driver instanceof PostgresDriver))
+            return;
+
+        return connection.manager.transaction(entityManager => {
+
+            return Promise.all([
+                entityManager.getRepository(Post).findOne({
+                    relations: ["author"],
+                    lock: {mode: "pessimistic_read", tables: ["post"]}
+                }),
+                entityManager.getRepository(Post).findOne({
+                    relations: ["author"],
+                    lock: {mode: "pessimistic_write", tables: ["post"]}
+                }),
+                entityManager.getRepository(Post).findOne({
+                    relations: ["author"],
+                    lock: {mode: "pessimistic_partial_write", tables: ["post"]}
+                }),
+                entityManager.getRepository(Post).findOne({
+                    relations: ["author"],
+                    lock: {mode: "pessimistic_write_or_fail", tables: ["post"]}
+                }),
+                entityManager.getRepository(Post).findOne({
+                    relations: ["author"],
+                    lock: {mode: "for_no_key_update", tables: ["post"]}
+                }),
+            ]);
+        });
+    })));
+
+    it("should allow locking a relation of a relation", () => Promise.all(connections.map(async connection => {
+        if (!(connection.driver instanceof PostgresDriver || connection.driver instanceof CockroachDriver))
+            return;
+
+        return connection.manager.transaction(entityManager => {
+
+            return Promise.all([
+                entityManager.getRepository(Post).findOne({
+                    join: {
+                        alias: "post",
+                        innerJoinAndSelect: {
+                            categorys: "post.categories",
+                            images: "categorys.images"
+                        }
+                    },
+                    lock: {mode: "pessimistic_write", tables: ["image"]}
+                }),
+            ]);
+        });
     })));
 
 });
