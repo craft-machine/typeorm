@@ -1802,21 +1802,6 @@ export class SelectQueryBuilder<Entity> extends QueryBuilder<Entity> implements 
         // if still selection is empty, then simply set it to all (*)
         if (allSelects.length === 0) allSelects.push({ selection: "*" });
 
-        let lock: string = "";
-        if (this.connection.driver instanceof SqlServerDriver) {
-            switch (this.expressionMap.lockMode) {
-                case "pessimistic_read":
-                    lock = " WITH (HOLDLOCK, ROWLOCK)";
-                    break;
-                case "pessimistic_write":
-                    lock = " WITH (UPDLOCK, ROWLOCK)";
-                    break;
-                case "dirty_read":
-                    lock = " WITH (NOLOCK)";
-                    break;
-            }
-        }
-
         // Use certain index
         let useIndex: string = "";
         if (this.expressionMap.useIndex) {
@@ -1853,7 +1838,7 @@ export class SelectQueryBuilder<Entity> extends QueryBuilder<Entity> implements 
             )
             .join(", ");
 
-        return select + selection + " FROM " + froms.join(", ") + lock + useIndex;
+        return select + selection + " FROM " + froms.join(", ") + this.createTableLockExpression() + useIndex;
     }
 
     /**
@@ -1906,51 +1891,21 @@ export class SelectQueryBuilder<Entity> extends QueryBuilder<Entity> implements 
             // if join was build without relation (e.g. without "post.category") then it means that we have direct
             // table to join, without junction table involved. This means we simply join direct table.
             if (!parentAlias || !relation) {
-                const destinationJoin = joinAttr.alias.subQuery
-                    ? joinAttr.alias.subQuery
-                    : this.getTableName(destinationTableName);
-                return (
-                    " " +
-                    joinAttr.direction +
-                    " JOIN " +
-                    destinationJoin +
-                    " " +
-                    this.escape(destinationTableAlias) +
-                    (joinAttr.condition
-                        ? " ON " + this.replacePropertyNames(joinAttr.condition)
-                        : "")
-                );
+                const destinationJoin = joinAttr.alias.subQuery ? joinAttr.alias.subQuery : this.getTableName(destinationTableName);
+                return " " + joinAttr.direction + " JOIN " + destinationJoin + " " + this.escape(destinationTableAlias) + this.createTableLockExpression() +
+                    (joinAttr.condition ? " ON " + this.replacePropertyNames(joinAttr.condition) : "");
             }
 
             // if real entity relation is involved
             if (relation.isManyToOne || relation.isOneToOneOwner) {
                 // JOIN `category` `category` ON `category`.`id` = `post`.`categoryId`
-                const condition = relation.joinColumns
-                    .map((joinColumn) => {
-                        return (
-                            destinationTableAlias +
-                            "." +
-                            joinColumn.referencedColumn!.propertyPath +
-                            "=" +
-                            parentAlias +
-                            "." +
-                            relation.propertyPath +
-                            "." +
-                            joinColumn.referencedColumn!.propertyPath
-                        );
-                    })
-                    .join(" AND ");
+                const condition = relation.joinColumns.map(joinColumn => {
+                    return destinationTableAlias + "." + joinColumn.referencedColumn!.propertyPath + "=" +
+                        parentAlias + "." + relation.propertyPath + "." + joinColumn.referencedColumn!.propertyPath;
+                }).join(" AND ");
 
-                return (
-                    " " +
-                    joinAttr.direction +
-                    " JOIN " +
-                    this.getTableName(destinationTableName) +
-                    " " +
-                    this.escape(destinationTableAlias) +
-                    " ON " +
-                    this.replacePropertyNames(condition + appendedCondition)
-                );
+                return " " + joinAttr.direction + " JOIN " + this.getTableName(destinationTableName) + " " + this.escape(destinationTableAlias) + this.createTableLockExpression() + " ON " + this.replacePropertyNames(condition + appendedCondition);
+
             } else if (relation.isOneToMany || relation.isOneToOneNotOwner) {
                 // JOIN `post` `post` ON `post`.`categoryId` = `category`.`id`
                 const condition = relation.inverseRelation!.joinColumns.map(joinColumn => {
@@ -1962,7 +1917,7 @@ export class SelectQueryBuilder<Entity> extends QueryBuilder<Entity> implements 
                         parentAlias + "." + joinColumn.referencedColumn!.propertyPath;
                 }).join(" AND ");
 
-                return " " + joinAttr.direction + " JOIN " + this.getTableName(destinationTableName) + " " + this.escape(destinationTableAlias) + " ON " + this.replacePropertyNames(condition + appendedCondition);
+                return " " + joinAttr.direction + " JOIN " + this.getTableName(destinationTableName) + " " + this.escape(destinationTableAlias) + this.createTableLockExpression() + " ON " + this.replacePropertyNames(condition + appendedCondition);
 
             } else { // means many-to-many
                 const junctionTableName = relation.junctionEntityMetadata!.tablePath;
@@ -2035,26 +1990,9 @@ export class SelectQueryBuilder<Entity> extends QueryBuilder<Entity> implements 
                         .join(" AND ");
                 }
 
-                return (
-                    " " +
-                    joinAttr.direction +
-                    " JOIN " +
-                    this.getTableName(junctionTableName) +
-                    " " +
-                    this.escape(junctionAlias) +
-                    " ON " +
-                    this.replacePropertyNames(junctionCondition) +
-                    " " +
-                    joinAttr.direction +
-                    " JOIN " +
-                    this.getTableName(destinationTableName) +
-                    " " +
-                    this.escape(destinationTableAlias) +
-                    " ON " +
-                    this.replacePropertyNames(
-                        destinationCondition + appendedCondition
-                    )
-                );
+                return " " + joinAttr.direction + " JOIN " + this.getTableName(junctionTableName) + " " + this.escape(junctionAlias) + this.createTableLockExpression() + " ON "  + this.replacePropertyNames(junctionCondition) +
+                    " " + joinAttr.direction + " JOIN " + this.getTableName(destinationTableName) + " " + this.escape(destinationTableAlias) + this.createTableLockExpression() + " ON " + this.replacePropertyNames(destinationCondition + appendedCondition);
+
             }
         });
 
@@ -2177,6 +2115,29 @@ export class SelectQueryBuilder<Entity> extends QueryBuilder<Entity> implements 
             if (limit && offset) return " LIMIT " + limit + " OFFSET " + offset;
             if (limit) return " LIMIT " + limit;
             if (offset) return " OFFSET " + offset;
+        }
+
+        return "";
+    }
+
+    /**
+     * Creates "LOCK" part of SELECT Query after table Clause
+     * ex.
+     *  SELECT 1
+     *  FROM USER U WITH (NOLOCK)
+     *  JOIN ORDER O WITH (NOLOCK)
+     *      ON U.ID=O.OrderID
+     */
+    private createTableLockExpression(): string {
+        if(this.connection.driver instanceof SqlServerDriver) {
+            switch (this.expressionMap.lockMode) {
+                case "pessimistic_read":
+                    return " WITH (HOLDLOCK, ROWLOCK)";
+                case "pessimistic_write":
+                    return " WITH (UPDLOCK, ROWLOCK)";
+                case "dirty_read":
+                    return " WITH (NOLOCK)";
+            }
         }
 
         return "";
