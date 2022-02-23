@@ -1,7 +1,7 @@
 {
   "name": "@craft.co/typeorm-scoped",
   "private": false,
-  "version": "0.2.43-patch.5",
+  "version": "0.2.43-patch.6",
   "description": "Forked version of TypeORM with support of resource scoping",
   "license": "MIT",
   "readmeFilename": "README.md",
@@ -26,7 +26,9 @@
     "./*": {
       "require": "./*.js",
       "import": "./*"
-    }
+    },
+    "./util/*": "./util/*.js",
+    "./error/*": "./error/*.js"
   },
   "main": "./index.js",
   "module": "./index.mjs",
