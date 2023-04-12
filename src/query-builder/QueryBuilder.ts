@@ -45,6 +45,17 @@ import { escapeRegExp } from "../util/escapeRegExp"
  * Allows to build complex sql queries in a fashion way and execute those queries.
  */
 export abstract class QueryBuilder<Entity extends ObjectLiteral> {
+    /**
+     * Desired request scope, to be consumed
+     * by the @Scope decorator
+     */
+    public scope: Object;
+
+    setScope(scope: Object) {
+        this.scope = scope;
+        return this;
+    }
+
     readonly "@instanceof" = Symbol.for("QueryBuilder")
 
     // -------------------------------------------------------------------------
@@ -105,6 +116,8 @@ export abstract class QueryBuilder<Entity extends ObjectLiteral> {
             this.connection = connectionOrQueryBuilder
             this.queryRunner = queryRunner
             this.expressionMap = new QueryExpressionMap(this.connection)
+
+            this.scope = connectionOrQueryBuilder.scope;
         } else {
             this.connection = connectionOrQueryBuilder.connection
             this.queryRunner = connectionOrQueryBuilder.queryRunner
@@ -116,10 +129,44 @@ export abstract class QueryBuilder<Entity extends ObjectLiteral> {
     // Abstract Methods
     // -------------------------------------------------------------------------
 
+    abstract getRawQuery(): string;
+
     /**
      * Gets generated SQL query without parameters being replaced.
      */
-    abstract getQuery(): string
+    getQuery(): string {
+        let rawQuery = this.getRawQuery();
+        let scoped = false;
+
+        if (this.expressionMap.subQuery) return "(" + rawQuery + ")";
+
+        this.expressionMap.aliases.forEach((table) => {
+            if (scoped || !table || !table.hasMetadata) return;
+
+            const metadata = table.metadata.tableMetadataArgs;
+            const scope = metadata.scope;
+
+            if (scope) {
+                if (scope.enabled) {
+                    const isSelect = this.expressionMap.queryType === "select";
+                    const hasReturning = this.expressionMap.returning || this.expressionMap.extraReturningColumns.length;
+                    const needsReturning = !isSelect && !hasReturning;
+
+                    if (needsReturning) {
+                        rawQuery += " RETURNING *";
+                    }
+
+                    rawQuery = scope.apply(rawQuery, this.scope, this.expressionMap).trim();
+                } else if (scope.enabled === false) {
+                    scope.enabled = true;
+                }
+
+                scoped = true;
+            }
+        });
+
+        return rawQuery;
+    }
 
     // -------------------------------------------------------------------------
     // Accessors

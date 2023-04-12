@@ -1,11 +1,18 @@
 import { DataSource, SelectQueryBuilder } from ".."
 import { OrderByCondition } from "../find-options/OrderByCondition"
 import { TableType } from "../metadata/types/TableTypes"
+import { ScopeOptions } from "../decorator/Scope"
 
 /**
  * Arguments for TableMetadata class, helps to construct an TableMetadata object.
  */
 export interface TableMetadataArgs {
+    /**
+     * Metadata about scoping to be applied to
+     * the given table.
+     */
+    scope?: ScopeOptions;
+
     /**
      * Class to which table is applied.
      * Function target is a table defined in the class.

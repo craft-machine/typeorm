@@ -230,10 +230,10 @@ export class MigrationGenerateCommand implements yargs.CommandModule {
     ): string {
         const migrationName = `${camelCase(name, true)}${timestamp}`
 
-        return `import { MigrationInterface, QueryRunner } from "typeorm";
+        return `import { MigrationInterface, QueryRunner } from '@craft.co/typeorm-scoped';
 
-export class ${migrationName} implements MigrationInterface {
-    name = '${migrationName}'
+export default class ${migrationName} implements MigrationInterface {
+    name = '${migrationName}';
 
     public async up(queryRunner: QueryRunner): Promise<void> {
 ${upSqls.join(`

@@ -22,7 +22,7 @@ export class RelationQueryBuilder<
     /**
      * Gets generated SQL query without parameters being replaced.
      */
-    getQuery(): string {
+    getRawQuery(): string {
         return ""
     }
 
