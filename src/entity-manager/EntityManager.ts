@@ -247,7 +247,7 @@ export class EntityManager {
             return metadata.create(this.queryRunner);
 
         if (Array.isArray(plainObjectOrObjects))
-            return plainObjectOrObjects.map(plainEntityLike => this.create(entityClass as any, plainEntityLike));
+            return (plainObjectOrObjects as DeepPartial<Entity>[]).map(plainEntityLike => this.create(entityClass, plainEntityLike));
 
         const mergeIntoEntity = metadata.create(this.queryRunner);
         this.plainObjectToEntityTransformer.transform(mergeIntoEntity, plainObjectOrObjects, metadata, true);
@@ -495,21 +495,6 @@ export class EntityManager {
             options = conflictPathsOrOptions;
         }
 
-        const uniqueColumnConstraints = [
-            metadata.primaryColumns,
-            ...metadata.indices.filter(ix => ix.isUnique).map(ix => ix.columns),
-            ...metadata.uniques.map(uq => uq.columns)
-        ];
-
-        const useIndex = uniqueColumnConstraints.find((ix) =>
-            ix.length === options.conflictPaths.length &&
-            options.conflictPaths.every((conflictPropertyPath) => ix.some((col) => col.propertyPath === conflictPropertyPath))
-        );
-
-        if (useIndex == null) {
-            throw new TypeORMError(`An upsert requires conditions that have a unique constraint but none was found for conflict properties: ${options.conflictPaths.join(", ")}`);
-        }
-
         let entities: QueryDeepPartialEntity<Entity>[];
 
         if (!Array.isArray(entityOrEntities)) {
@@ -529,7 +514,10 @@ export class EntityManager {
             .values(entities)
             .orUpdate(
                 [...conflictColumns, ...overwriteColumns].map((col) => col.databaseName),
-                conflictColumns.map((col) => col.databaseName)
+                conflictColumns.map((col) => col.databaseName),
+                {
+                    skipUpdateIfNoValuesChanged: options.skipUpdateIfNoValuesChanged
+                }
             )
             .execute();
     }

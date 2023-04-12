@@ -1,28 +1,31 @@
-import { ObjectLiteral } from "../common/ObjectLiteral";
-import { QueryRunner } from "../query-runner/QueryRunner";
-import { Connection } from "../connection/Connection";
-import { QueryExpressionMap } from "./QueryExpressionMap";
-import { SelectQueryBuilder } from "./SelectQueryBuilder";
-import { UpdateQueryBuilder } from "./UpdateQueryBuilder";
-import { DeleteQueryBuilder } from "./DeleteQueryBuilder";
-import { SoftDeleteQueryBuilder } from "./SoftDeleteQueryBuilder";
-import { InsertQueryBuilder } from "./InsertQueryBuilder";
-import { RelationQueryBuilder } from "./RelationQueryBuilder";
-import { EntityTarget } from "../common/EntityTarget";
-import { Alias } from "./Alias";
-import { Brackets } from "./Brackets";
-import { QueryDeepPartialEntity } from "./QueryPartialEntity";
-import { EntityMetadata } from "../metadata/EntityMetadata";
-import { ColumnMetadata } from "../metadata/ColumnMetadata";
-import { PostgresDriver } from "../driver/postgres/PostgresDriver";
-import { CockroachDriver } from "../driver/cockroachdb/CockroachDriver";
-import { SqlServerDriver } from "../driver/sqlserver/SqlServerDriver";
-import { OracleDriver } from "../driver/oracle/OracleDriver";
-import { EntitySchema, NotBrackets, TypeORMError } from "../";
-import { FindOperator } from "../find-options/FindOperator";
-import { In } from "../find-options/operator/In";
-import { EntityColumnNotFound } from "../error/EntityColumnNotFound";
-import { WhereClause, WhereClauseCondition } from "./WhereClause";
+import {ObjectLiteral} from "../common/ObjectLiteral";
+import {QueryRunner} from "../query-runner/QueryRunner";
+import {Connection} from "../connection/Connection";
+import {QueryExpressionMap} from "./QueryExpressionMap";
+import {SelectQueryBuilder} from "./SelectQueryBuilder";
+import {UpdateQueryBuilder} from "./UpdateQueryBuilder";
+import {DeleteQueryBuilder} from "./DeleteQueryBuilder";
+import {SoftDeleteQueryBuilder} from "./SoftDeleteQueryBuilder";
+import {InsertQueryBuilder} from "./InsertQueryBuilder";
+import {RelationQueryBuilder} from "./RelationQueryBuilder";
+import {EntityTarget} from "../common/EntityTarget";
+import {Alias} from "./Alias";
+import {Brackets} from "./Brackets";
+import {QueryDeepPartialEntity} from "./QueryPartialEntity";
+import {EntityMetadata} from "../metadata/EntityMetadata";
+import {ColumnMetadata} from "../metadata/ColumnMetadata";
+import {PostgresDriver} from "../driver/postgres/PostgresDriver";
+import {CockroachDriver} from "../driver/cockroachdb/CockroachDriver";
+import {SqlServerDriver} from "../driver/sqlserver/SqlServerDriver";
+import {OracleDriver} from "../driver/oracle/OracleDriver";
+import {EntitySchema} from "../entity-schema/EntitySchema";
+import {FindOperator} from "../find-options/FindOperator";
+import {In} from "../find-options/operator/In";
+import {EntityColumnNotFound} from "../error/EntityColumnNotFound";
+import {TypeORMError} from "../error";
+import {WhereClause, WhereClauseCondition} from "./WhereClause";
+import {NotBrackets} from "./NotBrackets";
+import {ReturningType} from "../driver/Driver";
 
 // todo: completely cover query builder with tests
 // todo: entityOrProperty can be target name. implement proper behaviour if it is.
@@ -866,7 +869,7 @@ export abstract class QueryBuilder<Entity> {
     /**
      * Creates "RETURNING" / "OUTPUT" expression.
      */
-    protected createReturningExpression(): string {
+    protected createReturningExpression(returningType: ReturningType): string {
         const columns = this.getReturningColumns();
         const driver = this.connection.driver;
 
@@ -875,13 +878,10 @@ export abstract class QueryBuilder<Entity> {
         if (
             typeof this.expressionMap.returning !== "string" &&
             this.expressionMap.extraReturningColumns.length > 0 &&
-            driver.isReturningSqlSupported()
-        ) {
-            columns.push(
-                ...this.expressionMap.extraReturningColumns.filter((column) => {
-                    return columns.indexOf(column) === -1;
-                })
-            );
+            driver.isReturningSqlSupported(returningType)) {
+            columns.push(...this.expressionMap.extraReturningColumns.filter(column => {
+                return columns.indexOf(column) === -1;
+            }));
         }
 
         if (columns.length) {
