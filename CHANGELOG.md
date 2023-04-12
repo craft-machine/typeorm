@@ -1,3 +1,862 @@
+## [0.3.14](https://github.com/typeorm/typeorm/compare/0.3.12...0.3.14) (2023-04-09)
+
+### Bug Fixes
+
+* drop xml & yml connection option support. Addresses security issues in underlying dependency ([#9930](https://github.com/typeorm/typeorm/issues/9930)) ([7dac12c](https://github.com/typeorm/typeorm/commit/7dac12c2b18be34fb63ebfde988eb0825ec21384))
+
+### Features
+
+* QueryBuilder performance optimizations ([#9914](https://github.com/typeorm/typeorm/issues/9914)) ([12e9db0](https://github.com/typeorm/typeorm/commit/12e9db07b6b9676e63fff5f55a45b1d269716ed9))
+
+## [0.3.13](https://github.com/typeorm/typeorm/compare/0.3.12...0.3.13) (2023-04-06)
+
+### Bug Fixes
+
+* firstCapital=true not working in camelCase() function ([f1330ad](https://github.com/typeorm/typeorm/commit/f1330ad6e23bea65a16b4f1c4199f10f3fa7282b))
+* handles "query" relation loading strategy for TreeRepositories ([#9680](https://github.com/typeorm/typeorm/issues/9680)) ([a11809e](https://github.com/typeorm/typeorm/commit/a11809e1b20cc77fd2767b8bab2500a0c7e20d23)), closes [#9673](https://github.com/typeorm/typeorm/issues/9673)
+* improve EntityNotFound error message in QueryBuilder.findOneOrFail ([#9872](https://github.com/typeorm/typeorm/issues/9872)) ([f7f6817](https://github.com/typeorm/typeorm/commit/f7f68178640120d8c1e92b8c9be0eeaa8262b4f3))
+* loading tables with fk in sqlite query runner ([#9875](https://github.com/typeorm/typeorm/issues/9875)) ([4997da0](https://github.com/typeorm/typeorm/commit/4997da054b5cfafdbdf374b3e554e5c4e0590da7)), closes [#9266](https://github.com/typeorm/typeorm/issues/9266)
+* prevent foreign key support during migration batch under sqlite ([#9775](https://github.com/typeorm/typeorm/issues/9775)) ([197cc05](https://github.com/typeorm/typeorm/commit/197cc05e90c0182357d85aa1ce7ae45de99d9d98)), closes [#9770](https://github.com/typeorm/typeorm/issues/9770)
+* proper default value on generating migration when default value is a function calling [Postgres] ([#9830](https://github.com/typeorm/typeorm/issues/9830)) ([bebba05](https://github.com/typeorm/typeorm/commit/bebba05388a40a9f278a450d4a988865c158abb7))
+* react-native doesn't properly work in ESM projects because of circular dependency ([#9765](https://github.com/typeorm/typeorm/issues/9765)) ([099fcd9](https://github.com/typeorm/typeorm/commit/099fcd9b104bc930faea08f97ee3d5610118e0c4))
+* resolve issues for mssql migration when simple-enum was changed ([cb154d4](https://github.com/typeorm/typeorm/commit/cb154d4ca36cda251fcb9eb05a29b7758ae813cf)), closes [#7785](https://github.com/typeorm/typeorm/issues/7785) [#9457](https://github.com/typeorm/typeorm/issues/9457) [#7785](https://github.com/typeorm/typeorm/issues/7785) [#9457](https://github.com/typeorm/typeorm/issues/9457)
+* resolves issue with mssql column recreation ([#9773](https://github.com/typeorm/typeorm/issues/9773)) ([07221a3](https://github.com/typeorm/typeorm/commit/07221a364682b567533c93130efb4f5189e009a9)), closes [#9399](https://github.com/typeorm/typeorm/issues/9399)
+* transform values for FindOperators [#9381](https://github.com/typeorm/typeorm/issues/9381) ([#9777](https://github.com/typeorm/typeorm/issues/9777)) ([de1228d](https://github.com/typeorm/typeorm/commit/de1228deace974eca3e9dd3956208ebe4cd9347f)), closes [#9816](https://github.com/typeorm/typeorm/issues/9816)
+* use forward slashes when normalizing path ([#9768](https://github.com/typeorm/typeorm/issues/9768)) ([58fc088](https://github.com/typeorm/typeorm/commit/58fc08840a4a64ca1935391f4709a784c3f0b373)), closes [#9766](https://github.com/typeorm/typeorm/issues/9766)
+* use object create if entity skip constructor is set ([#9831](https://github.com/typeorm/typeorm/issues/9831)) ([a868979](https://github.com/typeorm/typeorm/commit/a8689795dad796338e2a291a6a2fda89b00ef243))
+
+### Features
+
+* add support for json datatype for sqlite ([#9744](https://github.com/typeorm/typeorm/issues/9744)) ([4ac8c00](https://github.com/typeorm/typeorm/commit/4ac8c00117417ae622368aabe36d0fd5c676bd00))
+* add support for STI on EntitySchema ([#9834](https://github.com/typeorm/typeorm/issues/9834)) ([bc306fb](https://github.com/typeorm/typeorm/commit/bc306fb5a2c4dc02d04632af2b2f6c697a684356)), closes [#9833](https://github.com/typeorm/typeorm/issues/9833)
+* allow type FindOptionsOrderValue for order by object property ([#9895](https://github.com/typeorm/typeorm/issues/9895)) ([#9896](https://github.com/typeorm/typeorm/issues/9896)) ([0814970](https://github.com/typeorm/typeorm/commit/0814970a9cc2c958199c9d74d1ef313de43dab50))
+* Broadcast identifier for removed related entities  ([#9913](https://github.com/typeorm/typeorm/issues/9913)) ([f530811](https://github.com/typeorm/typeorm/commit/f530811b0da2863711db3467e55bf815c66b4b4b))
+* leftJoinAndMapOne and innerJoinAndMapOne map result to entity ([#9354](https://github.com/typeorm/typeorm/issues/9354)) ([947ffc3](https://github.com/typeorm/typeorm/commit/947ffc34324c1d692496804e43dafa6302efc1db))
+
+
+## [0.3.12](https://github.com/typeorm/typeorm/compare/0.3.11...0.3.12) (2023-02-07)
+
+### Bug Fixes
+
+* allow to pass ObjectLiteral in mongo find where condition ([#9632](https://github.com/typeorm/typeorm/issues/9632)) ([4eda5df](https://github.com/typeorm/typeorm/commit/4eda5df8693d1a659ff5c3461124cf05619fdd72)), closes [#9518](https://github.com/typeorm/typeorm/issues/9518)
+* DataSource.setOptions doesn't properly update the database in the drivers ([#9635](https://github.com/typeorm/typeorm/issues/9635)) ([a95bed7](https://github.com/typeorm/typeorm/commit/a95bed7c05d10eb4b508e225faa4cb3c7ea7944f))
+* Fix grammar error in no migrations found log ([#9754](https://github.com/typeorm/typeorm/issues/9754)) ([6fb2121](https://github.com/typeorm/typeorm/commit/6fb212187fdf97c07c41aad20d4f5503dfd44215))
+* improved `FindOptionsWhere` behavior with union types ([#9607](https://github.com/typeorm/typeorm/issues/9607)) ([7726f5a](https://github.com/typeorm/typeorm/commit/7726f5ad1ec0c826510202a0f2cbeea705547eee))
+* Incorrect enum default value when table name contains dash character ([#9685](https://github.com/typeorm/typeorm/issues/9685)) ([b3b0c11](https://github.com/typeorm/typeorm/commit/b3b0c118a40441b31ac18ee7ce0cea0696b701ab))
+* incorrect sorting of entities with multi-inheritances ([#9406](https://github.com/typeorm/typeorm/issues/9406)) ([54ca9dd](https://github.com/typeorm/typeorm/commit/54ca9dd801a77e011c2faf056b9e12845ccde82b))
+* make sure "require" is defined in the environment ([1a9b9fb](https://github.com/typeorm/typeorm/commit/1a9b9fbcd683b2a28acbd26e39ac98dc6b60f001))
+* materialized hints support for cte ([#9605](https://github.com/typeorm/typeorm/issues/9605)) ([67973b4](https://github.com/typeorm/typeorm/commit/67973b4726500fc835639ffc302e0b6b20093df4))
+* multiple select queries during db sync in sqlite ([#9639](https://github.com/typeorm/typeorm/issues/9639)) ([6c928a4](https://github.com/typeorm/typeorm/commit/6c928a4aa002cf5db0733055c0a754e97e4b43b3))
+* overriding caching settings when alwaysEnabled is true ([#9731](https://github.com/typeorm/typeorm/issues/9731)) ([4df969e](https://github.com/typeorm/typeorm/commit/4df969ea6254f9f69c371a72d80e857ab7c1f62d))
+* redundant Unique constraint on primary join column in Postgres ([#9677](https://github.com/typeorm/typeorm/issues/9677)) ([b8704f8](https://github.com/typeorm/typeorm/commit/b8704f87d2e06c048dea3f0b408ab18738acf7d7))
+* remove unnecessary .js extension in imports ([#9713](https://github.com/typeorm/typeorm/issues/9713)) ([6b37e38](https://github.com/typeorm/typeorm/commit/6b37e3818bd74541cadbd44e55c84df510e41e3a))
+* resolve issue with "simple-enum" synchronization in SQLite ([#9716](https://github.com/typeorm/typeorm/issues/9716)) ([c77c43e](https://github.com/typeorm/typeorm/commit/c77c43e2423201bdc2ede85ae921447570685585)), closes [#9715](https://github.com/typeorm/typeorm/issues/9715)
+* sql expression when `where` parameter is empty array ([#9691](https://github.com/typeorm/typeorm/issues/9691)) ([7df2ccf](https://github.com/typeorm/typeorm/commit/7df2ccf69d13f8f0769e614638d8badd89c181b0)), closes [#9690](https://github.com/typeorm/typeorm/issues/9690)
+* synchronizing View with schema broken for oracle ([#9602](https://github.com/typeorm/typeorm/issues/9602)) ([18b659d](https://github.com/typeorm/typeorm/commit/18b659d1298a4606da0ea54ebd852f1c726ed4f2))
+
+### Features
+
+* add find operator json contains ([#9665](https://github.com/typeorm/typeorm/issues/9665)) ([d2f37f6](https://github.com/typeorm/typeorm/commit/d2f37f6e72f3f7566bcd312a256c652ea5dc5508))
+* allow mysql2 v3 as peerDependency ([#9747](https://github.com/typeorm/typeorm/issues/9747)) ([6c9010e](https://github.com/typeorm/typeorm/commit/6c9010e466ef103685ad842b5bcfef8ad8ace0c2)), closes [#9714](https://github.com/typeorm/typeorm/issues/9714)
+* naming strategy for legacy Oracle ([#9703](https://github.com/typeorm/typeorm/issues/9703)) ([0eb7441](https://github.com/typeorm/typeorm/commit/0eb74411d62f9132ba45154040b204f31a98c779))
+* support busy_timeout param parameter for sqlite ([#9623](https://github.com/typeorm/typeorm/issues/9623)) ([8668c29](https://github.com/typeorm/typeorm/commit/8668c29d83765001d68918f0fbe663061eee9373))
+* support enableWal for the better-sqlite3 driver ([#9619](https://github.com/typeorm/typeorm/issues/9619)) ([8731858](https://github.com/typeorm/typeorm/commit/8731858fbc88150f935b9a853f533d5c217d9d0e))
+* support for SQL aggregate functions SUM, AVG, MIN, and MAX to the Repository API ([#9737](https://github.com/typeorm/typeorm/issues/9737)) ([7d1f1d6](https://github.com/typeorm/typeorm/commit/7d1f1d69588b771c5ec393c86976008a352ddcc0))
+* support time travel queries, upsert, enums, spatial types in cockroachdb ([#9128](https://github.com/typeorm/typeorm/issues/9128)) ([defb409](https://github.com/typeorm/typeorm/commit/defb409f5650fed0b7a4ff2933208282a45572fb)), closes [#9068](https://github.com/typeorm/typeorm/issues/9068) [#8532](https://github.com/typeorm/typeorm/issues/8532) [#8532](https://github.com/typeorm/typeorm/issues/8532) [#9199](https://github.com/typeorm/typeorm/issues/9199)
+* update mssql dependency and other dependencies as well ([#9763](https://github.com/typeorm/typeorm/issues/9763)) ([4555211](https://github.com/typeorm/typeorm/commit/4555211bcb71dce59b418a185141cc413a910352))
+
+
+## [0.3.11](https://github.com/typeorm/typeorm/compare/0.3.10...0.3.11) (2022-12-03)
+
+### Fixes
+
+* boolean parameter escape in SQLiteDriver ([#9400](https://github.com/typeorm/typeorm/issues/9400)) ([4a36d0e](https://github.com/typeorm/typeorm/commit/4a36d0e8c1c50260b3a15c693802856341adfee6)), closes [#1981](https://github.com/typeorm/typeorm/issues/1981)
+* cacheId not used when loading relations with take ([#9469](https://github.com/typeorm/typeorm/issues/9469)) ([93e6b3d](https://github.com/typeorm/typeorm/commit/93e6b3dd8e6c26c64a30350a6dcd486c47d7e516))
+* correctly return insertId for react-native ([#9554](https://github.com/typeorm/typeorm/issues/9554)) ([97fae63](https://github.com/typeorm/typeorm/commit/97fae631b33e5bea957f96b242df30737e2c3792))
+* disable transactionSupport option for CordovaDriver ([#9391](https://github.com/typeorm/typeorm/issues/9391)) ([53fad8f](https://github.com/typeorm/typeorm/commit/53fad8f235140b5625d0f2fb738c74d33fa31ea2))
+* explicitly define property for entity relation as enumerable ([#9437](https://github.com/typeorm/typeorm/issues/9437)) ([85fa9c6](https://github.com/typeorm/typeorm/commit/85fa9c6e7df1a0e3ba8c95d64d9b2a6ab464e0e0)), closes [#6631](https://github.com/typeorm/typeorm/issues/6631)
+* fix ormUtils prototype check crashing on null prototype ([#9517](https://github.com/typeorm/typeorm/issues/9517)) ([19536ed](https://github.com/typeorm/typeorm/commit/19536edc3997d4ce83da28cc63b3962491c093d9))
+* fixed outdated `init` command ([#9422](https://github.com/typeorm/typeorm/issues/9422)) ([0984307](https://github.com/typeorm/typeorm/commit/09843078bec2e8bccece0807847ba0bc100aef5f))
+* left instead of inner join for where or + optional relations ([#9516](https://github.com/typeorm/typeorm/issues/9516)) ([d490793](https://github.com/typeorm/typeorm/commit/d490793c7ced454bcc4d770638701a54032595cc))
+* Mark array arguments to find operators as read-only ([#9474](https://github.com/typeorm/typeorm/issues/9474)) ([6eb674b](https://github.com/typeorm/typeorm/commit/6eb674bb9d5272b41b3312211e3a55390e2fe2ff))
+* pass fake flag to undoLastMigration ([#9562](https://github.com/typeorm/typeorm/issues/9562)) ([2458ac7](https://github.com/typeorm/typeorm/commit/2458ac70444ec79f800a9f5d7b8c42aeacaf4571)), closes [#9561](https://github.com/typeorm/typeorm/issues/9561)
+* resolve issue with migrations and unsigned int columns in aurora-data-api ([#9478](https://github.com/typeorm/typeorm/issues/9478)) ([38e0eff](https://github.com/typeorm/typeorm/commit/38e0eff18ae23133dd0f8a392a1943a7572e68f7)), closes [#9477](https://github.com/typeorm/typeorm/issues/9477)
+* resolve nameless TableForeign on drop foreign key ([#9460](https://github.com/typeorm/typeorm/issues/9460)) ([efb4168](https://github.com/typeorm/typeorm/commit/efb41688403b4daf59a129d0fd24aa4dadb626a6)), closes [#9432](https://github.com/typeorm/typeorm/issues/9432)
+* synchronize with typeorm_metadata table only if needed ([#9175](https://github.com/typeorm/typeorm/issues/9175)) ([cdabaa3](https://github.com/typeorm/typeorm/commit/cdabaa30287d357c0ae994209e573f97f92dad22)), closes [#9173](https://github.com/typeorm/typeorm/issues/9173) [#9173](https://github.com/typeorm/typeorm/issues/9173) [#9173](https://github.com/typeorm/typeorm/issues/9173)
+* the mpath is incorrect when the parent of the tree entity is null ([#9535](https://github.com/typeorm/typeorm/issues/9535)) ([658604d](https://github.com/typeorm/typeorm/commit/658604d0aeb65304053378ce0405f41217da45f1))
+* typings for Repository.extend function ([#9396](https://github.com/typeorm/typeorm/issues/9396)) ([f07fb2c](https://github.com/typeorm/typeorm/commit/f07fb2c3f2a4e970aef247cfd25b4a501933e6cc))
+
+
+### Features
+
+* "And" operator in FindOptions ([#9489](https://github.com/typeorm/typeorm/issues/9489)) ([fc3b4f8](https://github.com/typeorm/typeorm/commit/fc3b4f8021271601d5b896b6b30b3820303ca6fe)), closes [#3113](https://github.com/typeorm/typeorm/issues/3113)
+* add id in migrate:show command logging ([#9475](https://github.com/typeorm/typeorm/issues/9475)) ([71efa8e](https://github.com/typeorm/typeorm/commit/71efa8e8590b6c2ff58e46cdaed0ef2c146e3eb0))
+* add Open DB Flags and URI DB Name in SQLite ([#9468](https://github.com/typeorm/typeorm/issues/9468)) ([73148c9](https://github.com/typeorm/typeorm/commit/73148c9ad484983123090f2ebedd3f48f83808ce))
+* add parseInt8 option to postgres driver. Closes [#9341](https://github.com/typeorm/typeorm/issues/9341) ([#9435](https://github.com/typeorm/typeorm/issues/9435)) ([2473ff0](https://github.com/typeorm/typeorm/commit/2473ff0a8eca2fafffdabd6fa4cc46b76347f0c2))
+* Add synchronize to @JoinTable ([#9442](https://github.com/typeorm/typeorm/issues/9442)) ([93e14a9](https://github.com/typeorm/typeorm/commit/93e14a928bc8755742ddbe81dffd44eac21c05e4)), closes [#3443](https://github.com/typeorm/typeorm/issues/3443)
+* added opaque types support over primitives in find-options ([#9560](https://github.com/typeorm/typeorm/issues/9560)) ([4ec04fa](https://github.com/typeorm/typeorm/commit/4ec04fa1205ec9587946869c56077dae5454a063))
+* allow for partial index conditions for on conflict statments in postgres ([#8971](https://github.com/typeorm/typeorm/issues/8971)) ([2c54381](https://github.com/typeorm/typeorm/commit/2c543818158ecf0a3425b2bc7c5b26f6aff95b03))
+* allow peerDependency of better-sqlite3 version 8.x.x ([#9564](https://github.com/typeorm/typeorm/issues/9564)) ([26107e6](https://github.com/typeorm/typeorm/commit/26107e6b313fcc1a4c68998caa480a416a3af3e1)), closes [#9563](https://github.com/typeorm/typeorm/issues/9563)
+* allow per-migration control over transaction behavior ([#9459](https://github.com/typeorm/typeorm/issues/9459)) ([6ba48bd](https://github.com/typeorm/typeorm/commit/6ba48bdc1bf032540256f6435327e70204bdfd6e)), closes [#7087](https://github.com/typeorm/typeorm/issues/7087)
+* implement exists query method ([#9303](https://github.com/typeorm/typeorm/issues/9303)) ([598e269](https://github.com/typeorm/typeorm/commit/598e26980d0ae8431f53c14afe8f1f3ba93e43c1)), closes [#2815](https://github.com/typeorm/typeorm/issues/2815)
+* index support for materialized views of PostgreSQL ([#9414](https://github.com/typeorm/typeorm/issues/9414)) ([1cb738a](https://github.com/typeorm/typeorm/commit/1cb738a701fde93814f9aaeee1b99ece938c0744))
+* migration:generate successful exit the process with zero code ([#9288](https://github.com/typeorm/typeorm/issues/9288)) ([f215e2d](https://github.com/typeorm/typeorm/commit/f215e2d16f75c730d0f2bdbd9abdbccd3b69865e))
+* new virtual column decorator ([#9339](https://github.com/typeorm/typeorm/issues/9339)) ([d305e5f](https://github.com/typeorm/typeorm/commit/d305e5f9ac431f9b38a21e493886bf4836daa488)), closes [#9323](https://github.com/typeorm/typeorm/issues/9323) [typeorm#9323](https://github.com/typeorm/issues/9323) [typeorm#9323](https://github.com/typeorm/issues/9323) [typeorm#9323](https://github.com/typeorm/issues/9323) [typeorm#9323](https://github.com/typeorm/issues/9323)
+* upsert options conflictPaths as Entity keys ([#9365](https://github.com/typeorm/typeorm/issues/9365)) ([b282428](https://github.com/typeorm/typeorm/commit/b2824288f83b76b1bb8af83f51e814cc8311e4e5))
+
+## [0.3.10](https://github.com/typeorm/typeorm/compare/0.3.9...0.3.10) (2022-09-19)
+
+### Bug Fixes
+
+* "Cannot commit, no transaction is active" error in sql.js ([#9234](https://github.com/typeorm/typeorm/issues/9234)) ([749809a](https://github.com/typeorm/typeorm/commit/749809a42ada15674c995753f683287efe6b3722)), closes [#9100](https://github.com/typeorm/typeorm/issues/9100)
+* add missing support for primaryKeyConstraintName property in EntitySchema ([cc63961](https://github.com/typeorm/typeorm/commit/cc639610dc3fb3fabb982bb25cd7f7cf9dd4e68a))
+* malformed query when selecting deeply nested embedded entities ([#9273](https://github.com/typeorm/typeorm/issues/9273)) ([83f7b88](https://github.com/typeorm/typeorm/commit/83f7b88387f47fdf59c63b906cd7e60c33789673))
+* prototype pollution issue ([e3aac27](https://github.com/typeorm/typeorm/commit/e3aac270319006069b37f574c6e41a1fcfe7c5b1))
+* typescript 4.8 type issues [#9331](https://github.com/typeorm/typeorm/issues/9331) ([#9357](https://github.com/typeorm/typeorm/issues/9357)) ([a1960e1](https://github.com/typeorm/typeorm/commit/a1960e1125c36cd7c9bd2e550a001631090314aa))
+* Update RelationIdLoader to use DriverUtils.getAlias ([#9380](https://github.com/typeorm/typeorm/issues/9380)) ([a917d65](https://github.com/typeorm/typeorm/commit/a917d657fbb2492cf78eee3a49b09bbb13898aa0)), closes [#9379](https://github.com/typeorm/typeorm/issues/9379)
+
+### Features
+
+* orphanedRowAction=disabled (rebase of PR 8285) ([#8678](https://github.com/typeorm/typeorm/issues/8678)) ([de15df1](https://github.com/typeorm/typeorm/commit/de15df14ede16f11da176a499282a79a2aa9e324))
+* sqlite - deferrable options for foreign keys ([#9360](https://github.com/typeorm/typeorm/issues/9360)) ([773a4fe](https://github.com/typeorm/typeorm/commit/773a4fe439e0a3c4ee90e5c9545b2d4784008eb0))
+* unify Pool max connection size in supported Drivers ([#9305](https://github.com/typeorm/typeorm/issues/9305)) ([48976c2](https://github.com/typeorm/typeorm/commit/48976c2967ce821252c636f54f027a89b71db142)), closes [#3388](https://github.com/typeorm/typeorm/issues/3388)
+* update db image versions in docker compose ([#9367](https://github.com/typeorm/typeorm/issues/9367)) ([f24b262](https://github.com/typeorm/typeorm/commit/f24b26202b86dc70a97e3fc11136051f26f68046)), closes [#9326](https://github.com/typeorm/typeorm/issues/9326)
+
+
+## [0.3.9](https://github.com/typeorm/typeorm/compare/0.3.7...0.3.9) (2022-08-28)
+
+* fixed regression introduced in 0.3.8 - broken CLI because of #8917 ([#9332](https://github.com/typeorm/typeorm/issues/9332)), closes [#9330](https://github.com/typeorm/typeorm/issues/9330)
+
+## [0.3.8](https://github.com/typeorm/typeorm/compare/0.3.7...0.3.8) (2022-08-26)
+
+### Bug Fixes
+
+* allow space and no-space syntaxes for SQLite constraints ([#9238](https://github.com/typeorm/typeorm/issues/9238)) ([bb07244](https://github.com/typeorm/typeorm/commit/bb07244b6188e623a6f8c8407e808d75f94918af)), closes [#9237](https://github.com/typeorm/typeorm/issues/9237)
+* allow where IsNull for ManyToOne relations ([#9031](https://github.com/typeorm/typeorm/issues/9031)) ([72728f1](https://github.com/typeorm/typeorm/commit/72728f155d2e9d11fd9c2c1fb97c071c3b41ae6b)), closes [#8890](https://github.com/typeorm/typeorm/issues/8890)
+* change postgres driver version checking query ([#9319](https://github.com/typeorm/typeorm/issues/9319)) ([c4f4650](https://github.com/typeorm/typeorm/commit/c4f46506d87009a589a7adf9b9367be06c92042c)), closes [#9318](https://github.com/typeorm/typeorm/issues/9318) [#9318](https://github.com/typeorm/typeorm/issues/9318)
+* don't use temporary table name to create foreign key, unique, check constraint with SQLite ([#9185](https://github.com/typeorm/typeorm/issues/9185)) ([e519910](https://github.com/typeorm/typeorm/commit/e51991076dbed4ed06f3cd008eac8029a01c78d2)), closes [#9176](https://github.com/typeorm/typeorm/issues/9176)
+* dropIndex now works when providing a tableIndex without name ([#8937](https://github.com/typeorm/typeorm/issues/8937)) ([de8aaac](https://github.com/typeorm/typeorm/commit/de8aaac54c72f098a50362430ca160ab1c672597))
+* entity manager remove using entity schemas ([#9221](https://github.com/typeorm/typeorm/issues/9221)) ([f045536](https://github.com/typeorm/typeorm/commit/f045536f2449f7adcbc346a94dcf30573c76e56b))
+* find query mongodb properly with @DeleteDateColumn() ([#9262](https://github.com/typeorm/typeorm/issues/9262)) ([e49d0c8](https://github.com/typeorm/typeorm/commit/e49d0c8740b9dec45448131edc012a920e6fcea2))
+* handle inherited relations insert order ([#9242](https://github.com/typeorm/typeorm/issues/9242)) ([14dfadb](https://github.com/typeorm/typeorm/commit/14dfadbde94f4f87678e155394ca9334af7bfa32)), closes [#9241](https://github.com/typeorm/typeorm/issues/9241)
+* handle inherited relations insert order ([#9321](https://github.com/typeorm/typeorm/issues/9321)) ([3671887](https://github.com/typeorm/typeorm/commit/36718876f9289175452ca93d4c0b70393b3324ed)), closes [#9242](https://github.com/typeorm/typeorm/issues/9242) [#9241](https://github.com/typeorm/typeorm/issues/9241)
+* pass error to pgpool release ([#9209](https://github.com/typeorm/typeorm/issues/9209)) ([eb8f0c6](https://github.com/typeorm/typeorm/commit/eb8f0c6c0442aa7a74c6581344fa64be5637538c)), closes [#7792](https://github.com/typeorm/typeorm/issues/7792) [#5112](https://github.com/typeorm/typeorm/issues/5112)
+* QueryBuilder update handles Date objects wrong on a ManyToOne relationship ([#8748](https://github.com/typeorm/typeorm/issues/8748)) ([88d0ced](https://github.com/typeorm/typeorm/commit/88d0ced812c9e05ef088dfd5ebaab003eb1811b4)), closes [#8747](https://github.com/typeorm/typeorm/issues/8747)
+* resolve FindOptionsOrder.nulls to allow FIRST/LAST in uppercase ([#8978](https://github.com/typeorm/typeorm/issues/8978)) ([5e5abbd](https://github.com/typeorm/typeorm/commit/5e5abbd14854a431db06d4ab337705797415786b)), closes [#8970](https://github.com/typeorm/typeorm/issues/8970)
+* resolve issues with new synonymous for GeometryCollection type in MySQL 8 ([#8927](https://github.com/typeorm/typeorm/issues/8927)) ([5ebc626](https://github.com/typeorm/typeorm/commit/5ebc626d29af8c343cee445153377d10d92e309f))
+* sqlite temporary tables now honor withoutRowid ([#8431](https://github.com/typeorm/typeorm/issues/8431)) ([b8d04dc](https://github.com/typeorm/typeorm/commit/b8d04dc3f9aef0658b72d5d438716c1f76420004)), closes [#8430](https://github.com/typeorm/typeorm/issues/8430)
+* support async import for DataSource in CLI [#8914](https://github.com/typeorm/typeorm/issues/8914) ([#8917](https://github.com/typeorm/typeorm/issues/8917)) ([15f90e0](https://github.com/typeorm/typeorm/commit/15f90e0be897f5bd2f4dac1d1e8d24f539a842a8))
+* update date utils to parse year correctly for years 1-999 ([#9236](https://github.com/typeorm/typeorm/issues/9236)) ([72a0147](https://github.com/typeorm/typeorm/commit/72a0147f31c14ca27b88af1d69a3a5ab409fec8d)), closes [#9230](https://github.com/typeorm/typeorm/issues/9230)
+
+### Features
+
+* add fake migrations running and reverting ([#8976](https://github.com/typeorm/typeorm/issues/8976)) ([340ab67](https://github.com/typeorm/typeorm/commit/340ab67b1013781184ab74bc8c8f72d76be2c927)), closes [#6195](https://github.com/typeorm/typeorm/issues/6195)
+* add setOnLocked for SKIP LOCKED and NOWAIT ([#9317](https://github.com/typeorm/typeorm/issues/9317)) ([68e8f22](https://github.com/typeorm/typeorm/commit/68e8f2289487ad21c18fb7b93754788a02199ee4))
+* add support for non-generated columns with uuid_generate_v4() default ([#9065](https://github.com/typeorm/typeorm/issues/9065)) ([dadb658](https://github.com/typeorm/typeorm/commit/dadb658c59645effaacf4e737e4401cc66b1099d)), closes [#9063](https://github.com/typeorm/typeorm/issues/9063)
+* new mssql option appName ([#9213](https://github.com/typeorm/typeorm/issues/9213)) ([51a0ebe](https://github.com/typeorm/typeorm/commit/51a0ebe5f296db8251b037928021715404eeabda))
+
+## [0.3.7](https://github.com/typeorm/typeorm/compare/0.3.6...0.3.7) (2022-06-29)
+
+### Bug Fixes
+
+* add missing `enumName` support for EntitySchema ([#9024](https://github.com/typeorm/typeorm/issues/9024)) ([676fd1b](https://github.com/typeorm/typeorm/commit/676fd1bf772db535bd2c084ebadd9f5c0661ca5e))
+* add missing connect call on RedisQueryResultCache connect ([#8894](https://github.com/typeorm/typeorm/issues/8894)) ([7dfb69f](https://github.com/typeorm/typeorm/commit/7dfb69f3664458d6f9f299f5bdbce4bed0b7994f))
+* add SET TRANSACTION AUTOCOMMIT DDL statements (SAP HANA) ([#9020](https://github.com/typeorm/typeorm/issues/9020)) ([cac648e](https://github.com/typeorm/typeorm/commit/cac648e633e0011d42a8a0c4ebcf900f6675d645))
+* call dataSource.destroy() only on initialized dataSource in CLI commands ([#9146](https://github.com/typeorm/typeorm/issues/9146)) ([a100a7a](https://github.com/typeorm/typeorm/commit/a100a7a7f1c17432549e5e93fb141d0f52062213))
+* expo infinite loop on SAVEPOINT ([#8984](https://github.com/typeorm/typeorm/issues/8984)) ([ec23922](https://github.com/typeorm/typeorm/commit/ec23922da745fde7c1e7e353777327f40fbaca28))
+* fixes recursive document to entity attributes mapping ([#9050](https://github.com/typeorm/typeorm/issues/9050)) ([40155d6](https://github.com/typeorm/typeorm/commit/40155d6ceed1f33f26da548681644c17625605e7)), closes [#9049](https://github.com/typeorm/typeorm/issues/9049)
+* log command error prior to calling destroy ([#9135](https://github.com/typeorm/typeorm/issues/9135)) ([bf17381](https://github.com/typeorm/typeorm/commit/bf17381fd2f949b36394b3cfa0199831d41f67dc))
+* make soft-remove and recover events importable from index ([#9110](https://github.com/typeorm/typeorm/issues/9110)) ([e296126](https://github.com/typeorm/typeorm/commit/e2961263e07ee058d5b1c3706cea21b3ae24d776)), closes [#9108](https://github.com/typeorm/typeorm/issues/9108)
+* migration successful now displays name of the migration file ([#8904](https://github.com/typeorm/typeorm/issues/8904)) ([49cbe23](https://github.com/typeorm/typeorm/commit/49cbe232776a5cbe4369a5fed08221dcff8d59e2))
+* release newly created runner when no runner provided in DbQueryResultCache ([#8969](https://github.com/typeorm/typeorm/issues/8969)) ([ec05f1d](https://github.com/typeorm/typeorm/commit/ec05f1d58a08b3cdb72243856a186fef738a236e)), closes [#4866](https://github.com/typeorm/typeorm/issues/4866)
+* resolve cli init peer dependency issues ([#8977](https://github.com/typeorm/typeorm/issues/8977)) ([f7578d4](https://github.com/typeorm/typeorm/commit/f7578d48ef160634744b591636b903728ea79120)), closes [#8975](https://github.com/typeorm/typeorm/issues/8975)
+* resolve ESM module declaration file correctly ([#9097](https://github.com/typeorm/typeorm/issues/9097)) ([506133e](https://github.com/typeorm/typeorm/commit/506133e2179529bf3add2b0b982613835d321af6))
+* support for TypeScript 4.8 ([#9106](https://github.com/typeorm/typeorm/issues/9106)) ([d924b70](https://github.com/typeorm/typeorm/commit/d924b705e5ea4ff57c853e8848eeb1f3b90c0a71)), closes [/github.com/microsoft/TypeScript/issues/49461#issuecomment-1154443477](https://github.com//github.com/microsoft/TypeScript/issues/49461/issues/issuecomment-1154443477)
+* update mssql peerDependency ([#8887](https://github.com/typeorm/typeorm/issues/8887)) ([9adab34](https://github.com/typeorm/typeorm/commit/9adab34e5d8744c134690f855111d21f5d29cf12))
+* wrong entity transform of relation id when referenced column is a primary key ([#8959](https://github.com/typeorm/typeorm/issues/8959)) ([6e888dd](https://github.com/typeorm/typeorm/commit/6e888dd0a13110f386ed538161740ae059491b91))
+
+### Features
+
+* add `for_key_share` ("FOR KEY SHARE") lock mode for postgres driver ([#8879](https://github.com/typeorm/typeorm/issues/8879)) ([4687be8](https://github.com/typeorm/typeorm/commit/4687be8b77b0f807b2fe4b1e2278e05d0dbd4431)), closes [#8878](https://github.com/typeorm/typeorm/issues/8878)
+* add nativeBinding option to better-sqlite3 driver ([#9157](https://github.com/typeorm/typeorm/issues/9157)) ([bcdddc3](https://github.com/typeorm/typeorm/commit/bcdddc32bddeb3d141c03372971ee27d743b9ab8))
+* add spanner as a db option for the init command ([#9121](https://github.com/typeorm/typeorm/issues/9121)) ([e61cade](https://github.com/typeorm/typeorm/commit/e61cade32fbcd491e4d8e27aea7b35b5a946c879))
+* allow explicitly named primary keys, foreign keys, and indices ([#8900](https://github.com/typeorm/typeorm/issues/8900)) ([78df84c](https://github.com/typeorm/typeorm/commit/78df84c732ce085caf4b5ccf37477ef93b38f4d0)), closes [#1355](https://github.com/typeorm/typeorm/issues/1355)
+* Cloud Spanner support ([#8730](https://github.com/typeorm/typeorm/issues/8730)) ([62518ae](https://github.com/typeorm/typeorm/commit/62518ae1226f22b2f230afa615532c92f1544f01))
+* fix issues with generated columns and add support in other drivers ([#8806](https://github.com/typeorm/typeorm/issues/8806)) ([0418ebc](https://github.com/typeorm/typeorm/commit/0418ebcaf6835dfffe3c3db1f66d20bfe3e5b09d)), closes [#8761](https://github.com/typeorm/typeorm/issues/8761)
+* implement support for relationids in entity schemas ([#9129](https://github.com/typeorm/typeorm/issues/9129)) ([e24cced](https://github.com/typeorm/typeorm/commit/e24cced8f63206a607deff6445cfcccf63c3a0c8))
+* support TS 4.7+ node16/nodenext module mode ([#9043](https://github.com/typeorm/typeorm/issues/9043)) ([862a402](https://github.com/typeorm/typeorm/commit/862a4027af14e5c3632c2a76c44b62ef0277338a))
+* upgrade ioredis to v5 ([#8997](https://github.com/typeorm/typeorm/issues/8997)) ([723f1e5](https://github.com/typeorm/typeorm/commit/723f1e514bf261bc1539bdaf86fd0a72a1e42a46))
+
+### Performance Improvements
+
+* don't recompile escapeRegExp for every query ([#8956](https://github.com/typeorm/typeorm/issues/8956)) ([189592c](https://github.com/typeorm/typeorm/commit/189592c77980e766f92f6eb77dbd7412db106086)), closes [#8955](https://github.com/typeorm/typeorm/issues/8955)
+* partially lift matching from regexp to js ([#9032](https://github.com/typeorm/typeorm/issues/9032)) ([bbdc20f](https://github.com/typeorm/typeorm/commit/bbdc20f8cafc63e768f248213eafe65f163cb6e5)), closes [#3857](https://github.com/typeorm/typeorm/issues/3857) [#8955](https://github.com/typeorm/typeorm/issues/8955) [#8956](https://github.com/typeorm/typeorm/issues/8956) [/github.com/typeorm/typeorm/issues/3857#issuecomment-699505893](https://github.com//github.com/typeorm/typeorm/issues/3857/issues/issuecomment-699505893)
+
+## [0.3.6](https://github.com/typeorm/typeorm/compare/0.3.5...0.3.6) (2022-04-12)
+
+### Features
+
+* add `for_key_share` ("FOR KEY SHARE") lock mode for postgres driver ([#8879](https://github.com/typeorm/typeorm/issues/8879)) ([4687be8](https://github.com/typeorm/typeorm/commit/4687be8b77b0f807b2fe4b1e2278e05d0dbd4431)), closes [#8878](https://github.com/typeorm/typeorm/issues/8878)
+* new driver: Cloud Spanner ([#8730](https://github.com/typeorm/typeorm/issues/8730)) ([62518ae](https://github.com/typeorm/typeorm/commit/62518ae1226f22b2f230afa615532c92f1544f01))
+
+## [0.3.5](https://github.com/typeorm/typeorm/compare/0.3.4...0.3.5) (2022-04-05)
+
+### Bug Fixes
+
+* `.save` repository method not returning generated uuids for aurora-postgres ([#8825](https://github.com/typeorm/typeorm/issues/8825)) ([ed06f4c](https://github.com/typeorm/typeorm/commit/ed06f4c1f1056837f03a97a25762742a12620a94))
+* allow hstore type to use transformers in driver postgres ([#8823](https://github.com/typeorm/typeorm/issues/8823)) ([b1a0107](https://github.com/typeorm/typeorm/commit/b1a01074c99b1fee9b2da2c056f5f773367d391b))
+* broken shebang parameters of `cli-ts-node-commonjs` and `cli-ts-node-esm` on some linux distros ([#8821](https://github.com/typeorm/typeorm/issues/8821)) ([c5dfc11](https://github.com/typeorm/typeorm/commit/c5dfc11ea7b8b33aa9e621b64b953c1d62a27989)), closes [#8818](https://github.com/typeorm/typeorm/issues/8818)
+* find select object api should support false values [#8796](https://github.com/typeorm/typeorm/issues/8796) ([#8807](https://github.com/typeorm/typeorm/issues/8807)) ([9ac8e9e](https://github.com/typeorm/typeorm/commit/9ac8e9ed0da0ac5bba71b76ee99d6f0c4eb0871f))
+* resolve missing ConnectionOptions export in index.ts ([#8850](https://github.com/typeorm/typeorm/issues/8850)) ([1693a17](https://github.com/typeorm/typeorm/commit/1693a17011195c353e5bc1d93d9c26ac48624a0b)), closes [#8837](https://github.com/typeorm/typeorm/issues/8837)
+* save correct discriminator with STI ([#8819](https://github.com/typeorm/typeorm/issues/8819)) ([9d1e246](https://github.com/typeorm/typeorm/commit/9d1e2460edae9c01f6a56c727f0321b265f78d89)), closes [#2927](https://github.com/typeorm/typeorm/issues/2927)
+* Update DeepPartial for usage of generics with Repository class ([#8817](https://github.com/typeorm/typeorm/issues/8817)) ([8ba742e](https://github.com/typeorm/typeorm/commit/8ba742eb36586a21a918ed178208874a53ace3f9))
+* fixed issue with `typeorm init` command ([#8820](https://github.com/typeorm/typeorm/issues/8820))
+
+## [0.3.4](https://github.com/typeorm/typeorm/compare/0.3.3...0.3.4) (2022-03-26)
+
+### Bug Fixes
+
+* BaseEntity.reload method regression and made `findOne` to throw error on missing conditions in runtime ([#8801](https://github.com/typeorm/typeorm/issues/8801)) ([ee8c1ec](https://github.com/typeorm/typeorm/commit/ee8c1ecbc210adcc685d6156a941004b9d724227))
+* improve DeepPartial recursion ([#8732](https://github.com/typeorm/typeorm/issues/8732)) ([0494008](https://github.com/typeorm/typeorm/commit/0494008b703240bf593c6f8f2c601cb0d6761805)), closes [#8681](https://github.com/typeorm/typeorm/issues/8681)
+* missing timestamp in created migrations filenames ([#8802](https://github.com/typeorm/typeorm/issues/8802)) ([ceee439](https://github.com/typeorm/typeorm/commit/ceee4396d31da1a7dde53cb50689f53659c8a4b1))
+* PoolConnection leaked by MysqlDriver ([#8803](https://github.com/typeorm/typeorm/issues/8803)) ([d2cfd22](https://github.com/typeorm/typeorm/commit/d2cfd224cacb5db9761aa9679764d699b8abbc65))
+* remove console.log calls from SelectQueryBuilder ([#8795](https://github.com/typeorm/typeorm/issues/8795)) ([54c7db4](https://github.com/typeorm/typeorm/commit/54c7db49355bb09514b6e977d1d7235c02557a0b)), closes [#8792](https://github.com/typeorm/typeorm/issues/8792)
+* stop crashing when redis is offline and ignoreErrors on cache options is set ([#8725](https://github.com/typeorm/typeorm/issues/8725)) ([edc39d1](https://github.com/typeorm/typeorm/commit/edc39d14a97d90c534b56693b988a0ad139e69fd))
+
+### Features
+
+* add support for insert with alias ([#4003](https://github.com/typeorm/typeorm/issues/4003)) ([#8791](https://github.com/typeorm/typeorm/issues/8791)) ([4b37030](https://github.com/typeorm/typeorm/commit/4b37030fc02878a27b0d57d4217b2efab49999af))
+* applicationName parameter for CockroachDB ([#8800](https://github.com/typeorm/typeorm/issues/8800)) ([79b7f5c](https://github.com/typeorm/typeorm/commit/79b7f5c22840992e205d61f6433916aaf80ea647))
+
+
+## [0.3.3](https://github.com/typeorm/typeorm/compare/0.3.2...0.3.3) (2022-03-23)
+
+### Bug Fixes
+
+* improve initialization of custom repository ([#8782](https://github.com/typeorm/typeorm/issues/8782)) ([52a641c](https://github.com/typeorm/typeorm/commit/52a641ca7ce8e4b168155b5043d1e9289c694fc7))
+* resolve entities correctly in datasource when globs are specified ([#8778](https://github.com/typeorm/typeorm/issues/8778)) ([a641c5d](https://github.com/typeorm/typeorm/commit/a641c5dff86df683b84e14873e88011013258f87))
+
+### Features
+
+* support for Common Table Expressions ([#8534](https://github.com/typeorm/typeorm/issues/8534)) ([7cc1848](https://github.com/typeorm/typeorm/commit/7cc1848fd4a44aefa986026ee659ed872ea6ab8f)), closes [#1116](https://github.com/typeorm/typeorm/issues/1116) [#5899](https://github.com/typeorm/typeorm/issues/5899) [#4753](https://github.com/typeorm/typeorm/issues/4753)
+
+
+## [0.3.2](https://github.com/typeorm/typeorm/compare/0.3.1...0.3.2) (2022-03-22)
+
+### Bug Fixes
+
+* broken CLI in ESM projects since version 0.3.0 ([#8773](https://github.com/typeorm/typeorm/issues/8773)) ([97699e8](https://github.com/typeorm/typeorm/commit/97699e816e03867efe595f620ceb152af91f9f56))
+
+### Features
+
+* add typeorm CLI variations that include `ts-node` ([#8776](https://github.com/typeorm/typeorm/issues/8776)) ([05fc744](https://github.com/typeorm/typeorm/commit/05fc74446988d100052f46e2dbf61c6cc2999b99))
+* allows user to specify which mysql package should be used ([#8771](https://github.com/typeorm/typeorm/issues/8771)) ([35106df](https://github.com/typeorm/typeorm/commit/35106dfe78a92783abca7d06307ab9106ae536bc))
+
+### Reverts
+
+* json/jsonb change introduced in 0.3.1 ([#8777](https://github.com/typeorm/typeorm/issues/8777)) ([edf27d9](https://github.com/typeorm/typeorm/commit/edf27d97a30d1aaf28e5c7a7aab96d16152e4983))
+
+
+## [0.3.1](https://github.com/typeorm/typeorm/compare/0.3.0...0.3.1) (2022-03-21)
+
+### Bug Fixes
+
+* bugfixes introduced in 0.3.0 ([#8764](https://github.com/typeorm/typeorm/issues/8764)) ([d61f857](https://github.com/typeorm/typeorm/commit/d61f857ce9447a25d074810759fd5c4aad9a08e3)), closes [#8762](https://github.com/typeorm/typeorm/issues/8762) [#8759](https://github.com/typeorm/typeorm/issues/8759) [#8758](https://github.com/typeorm/typeorm/issues/8758) [#8757](https://github.com/typeorm/typeorm/issues/8757)
+
+### Features
+
+* new array find operators (`ArrayContains`, `ArrayContainedBy`, `ArrayOverlap`) ([#8766](https://github.com/typeorm/typeorm/issues/8766)) ([9f1b8e3](https://github.com/typeorm/typeorm/commit/9f1b8e3425739a871c2d0ad84ddd6e7456117f7f)):
+
+### BREAKING CHANGES
+
+* we do not call JSON.stringify() to json/jsonb column types in Postgres. Instead, we delegate value directly to underlying pg driver. This is a correct way of handling jsons.
+* array: true must be explicitly defined for array json/jsonb values
+* strings being JSON-stringified must be manually escaped
+
+
+## [0.3.0](https://github.com/typeorm/typeorm/pull/8616) (2022-03-17)
+
+Changes in the version includes changes from the `next` branch and `typeorm@next` version.
+They were pending their migration from 2018. Finally, they are in the master branch and master version.
+
+### Features
+
+* compilation `target` now is `es2020`. This requires Node.JS version `14+`
+
+* TypeORM now properly works when installed within different node_modules contexts
+  (often happen if TypeORM is a dependency of another library or TypeORM is heavily used in monorepo projects)
+
+* `Connection` was renamed to `DataSource`.
+  Old `Connection` is still there, but now it's deprecated. It will be completely removed in next version.
+  New API:
+
+```ts
+export const dataSource = new DataSource({
+    // ... options ...
+})
+
+// load entities, establish db connection, sync schema, etc.
+await dataSource.connect()
+```
+
+Previously, you could use `new Connection()`, `createConnection()`, `getConnectionManager().create()`, etc.
+They all deprecated in favour of new syntax you can see above.
+
+New way gives you more flexibility and simplicity in usage.
+
+* new custom repositories syntax:
+
+```ts
+export const UserRepository = myDataSource.getRepository(UserEntity).extend({
+    findUsersWithPhotos() {
+        return this.find({
+            relations: {
+                photos: true
+            }
+        })
+    }
+})
+```
+
+Old ways of custom repository creation were dropped.
+
+* added new option on relation load strategy called `relationLoadStrategy`.
+  Relation load strategy is used on entity load and determines how relations must be loaded when you query entities and their relations from the database.
+  Used on `find*` methods and `QueryBuilder`. Value can be set to `join` or `query`.
+
+    * `join` - loads relations using SQL `JOIN` expression
+    * `query` - executes separate SQL queries for each relation
+
+Default is `join`, but default can be set in `ConnectionOptions`:
+
+```ts
+createConnection({
+    /* ... */
+    relationLoadStrategy: "query"
+})
+```
+
+Also, it can be set per-query in `find*` methods:
+
+```ts
+userRepository.find({
+    relations: {
+        photos: true
+    }
+})
+```
+
+And QueryBuilder:
+
+```ts
+userRepository
+    .createQueryBuilder()
+    .setRelationLoadStrategy("query")
+```
+
+For queries returning big amount of data, we recommend to use `query` strategy,
+because it can be a more performant approach to query relations.
+
+* added new `findOneBy`, `findOneByOrFail`, `findBy`, `countBy`, `findAndCountBy` methods to `BaseEntity`, `EntityManager` and `Repository`:
+
+```ts
+const users = await userRepository.findBy({
+    name: "Michael"
+})
+```
+
+Overall `find*` and `count*` method signatures where changed, read the "breaking changes" section for more info.
+
+* new `select` type signature in `FindOptions` (used in `find*` methods):
+
+```ts
+userRepository.find({
+    select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+    }
+})
+```
+
+Also, now it's possible to specify select columns of the loaded relations:
+
+```ts
+userRepository.find({
+    select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        photo: {
+            id: true,
+            filename: true,
+            album: {
+                id: true,
+                name: true,
+            }
+        }
+    }
+})
+```
+
+* new `relations` type signature in `FindOptions` (used in `find*` methods):
+
+```ts
+userRepository.find({
+    relations: {
+        contacts: true,
+        photos: true,
+    }
+})
+```
+
+To load nested relations use a following signature:
+
+```ts
+userRepository.find({
+    relations: {
+        contacts: true,
+        photos: {
+            album: true,
+        },
+    }
+})
+```
+
+* new `order` type signature in `FindOptions` (used in `find*` methods):
+
+```ts
+userRepository.find({
+    order: {
+        id: "ASC"
+    }
+})
+```
+
+Now supports nested order by-s:
+
+```ts
+userRepository.find({
+    order: {
+        photos: {
+            album: {
+                name: "ASC"
+            },
+        },
+    }
+})
+```
+
+* new `where` type signature in `FindOptions` (used in `find*` methods) now allows to build nested statements with conditional relations, for example:
+
+```ts
+userRepository.find({
+    where: {
+        photos: {
+            album: {
+                name: "profile"
+            }
+        }
+    }
+})
+```
+
+Gives you users who have photos in their "profile" album.
+
+* `FindOperator`-s can be applied for relations in `where` statement, for example:
+
+```ts
+userRepository.find({
+    where: {
+        photos: MoreThan(10),
+    }
+})
+```
+
+Gives you users with more than 10 photos.
+
+* `boolean` can be applied for relations in `where` statement, for example:
+
+```ts
+userRepository.find({
+    where: {
+        photos: true
+    }
+})
+```
+
+### BREAKING CHANGES
+
+* minimal Node.JS version requirement now is `14+`
+
+* drop `ormconfig` support. `ormconfig` still works if you use deprecated methods,
+however we do not recommend using it anymore, because it's support will be completely dropped in `0.4.0`.
+If you want to have your connection options defined in a separate file, you can still do it like this:
+
+```ts
+import ormconfig from "./ormconfig.json"
+
+const MyDataSource = new DataSource(require("./ormconfig.json"))
+```
+
+Or even more type-safe approach with `resolveJsonModule` in `tsconfig.json` enabled:
+
+```ts
+import ormconfig from "./ormconfig.json"
+
+const MyDataSource = new DataSource(ormconfig)
+```
+
+But we do not recommend use this practice, because from `0.4.0` you'll only be able to specify entities / subscribers / migrations using direct references to entity classes / schemas (see "deprecations" section).
+
+We won't be supporting all `ormconfig` extensions (e.g. `json`, `js`, `ts`, `yaml`, `xml`, `env`).
+
+* support for previously deprecated `migrations:*` commands was removed. Use `migration:*` commands instead.
+
+* all commands were re-worked. Please refer to new CLI documentation.
+
+* `cli` option from `BaseConnectionOptions` (now `BaseDataSourceOptions` options) was removed (since CLI commands were re-worked).
+
+* now migrations are running before schema synchronization if you have both pending migrations and schema synchronization pending
+  (it works if you have both `migrationsRun` and `synchronize` enabled in connection options).
+
+* `aurora-data-api` driver now is called `aurora-mysql`
+
+* `aurora-data-api-pg` driver now is called `aurora-postgres`
+
+* `EntityManager.connection` is now `EntityManager.dataSource`
+
+* `Repository` now has a constructor (breaks classes extending Repository with custom constructor)
+
+* `@TransactionRepository`, `@TransactionManager`, `@Transaction` decorators were completely removed. These decorators do the things out of the TypeORM scope.
+
+* Only junction table names shortened.
+
+**MOTIVATION:**  We must shorten only table names generated by TypeORM.
+It's user responsibility to name tables short if their RDBMS limit table name length
+since it won't make sense to have table names as random hashes.
+It's really better if user specify custom table name into `@Entity` decorator.
+Also, for junction table it's possible to set a custom name using `@JoinTable` decorator.
+
+* `findOne()` signature without parameters was dropped.
+  If you need a single row from the db you can use a following syntax:
+
+```ts
+const [user] = await userRepository.find()
+```
+
+This change was made to prevent user confusion.
+See [this issue](https://github.com/typeorm/typeorm/issues/2500) for details.
+
+* `findOne(id)` signature was dropped. Use following syntax instead:
+
+```ts
+const user = await userRepository.findOneBy({
+    id: id // where id is your column name
+})
+```
+
+This change was made to provide a more type-safe approach for data querying.
+Due to this change you might need to refactor the way you load entities using MongoDB driver.
+
+* `findOne`, `findOneOrFail`, `find`, `count`, `findAndCount` methods now only accept `FindOptions` as parameter, e.g.:
+
+```ts
+const users = await userRepository.find({
+    where: { /* conditions */ },
+    relations: { /* relations */ }
+})
+```
+
+To supply `where` conditions directly without `FindOptions` new methods were added:
+`findOneBy`, `findOneByOrFail`, `findBy`, `countBy`, `findAndCountBy`. Example:
+
+```ts
+const users = await userRepository.findBy({
+    name: "Michael"
+})
+```
+
+This change was required to simply current `find*` and `count*` methods typings,
+improve type safety and prevent user confusion.
+
+* `findByIds` was deprecated, use `findBy` method instead in conjunction with `In` operator, for example:
+
+```ts
+userRepository.findBy({
+    id: In([1, 2, 3])
+})
+```
+
+This change was made to provide a more type-safe approach for data querying.
+
+* `findOne` and `QueryBuilder.getOne()` now return `null` instead of `undefined` in the case if it didn't find anything in the database.
+  Logically it makes more sense to return `null`.
+
+* `findOne` now limits returning rows to 1 at database level.
+
+**NOTE:** `FOR UPDATE` locking does not work with `findOne` in Oracle since `FOR UPDATE` cannot be used with `FETCH NEXT` in a single query.
+
+* `where` in `FindOptions` (e.g. `find({ where: { ... })`) is more sensitive to input criteria now.
+
+* `FindConditions` (`where` in `FindOptions`) was renamed to `FindOptionsWhere`.
+
+* `null` as value in `where` used in `find*` methods is not supported anymore.
+  Now you must explicitly use `IsNull()` operator.
+
+Before:
+
+```ts
+userRepository.find({
+    where: {
+        photo: null
+    }
+})
+```
+
+After:
+
+```ts
+userRepository.find({
+    where: {
+        photo: IsNull()
+    }
+})
+```
+
+This change was made to make it more transparent on how to add "IS NULL" statement to final SQL,
+because before it bring too much confusion for ORM users.
+
+* if you had entity properties of a non-primitive type (except Buffer) defined as columns,
+  then you won't be able to use it in `find*`'s `where`. Example:
+
+Before for the `@Column(/*...*/) membership: MembershipKind` you could have a query like:
+
+```ts
+userRepository.find({
+    membership: new MembershipKind("premium")
+})
+```
+
+now, you need to wrap this value into `Equal` operator:
+
+```ts
+userRepository.find({
+    membership: Equal(new MembershipKind("premium"))
+})
+```
+
+This change is due to type-safety improvement new `where` signature brings.
+
+* `order` in `FindOptions` (used in `find*` methods) doesn't support ordering by relations anymore.
+  Define relation columns, and order by them instead.
+
+* `where` in `FindOptions` (used in `find*` methods) previously supported `ObjectLiteral` and `string` types.
+  Now both signatures were removed. ObjectLiteral was removed because it seriously breaks the type safety,
+  and `string` doesn't make sense in the context of `FindOptions`. Use `QueryBuilder` instead.
+
+* `MongoRepository` and `MongoEntityManager` now use new types called `MongoFindManyOptions` and `MongoFindOneOptions`
+  for their `find*` methods.
+
+* `primary relation` (e.g. `@ManyToOne(() => User, { primary: true }) user: User`) support is removed.
+  You still have an ability to use foreign keys as your primary keys,
+  however now you must explicitly define a column marked as primary.
+
+Example, before:
+
+```ts
+@ManyToOne(() => User, { primary: true })
+user: User
+```
+
+Now:
+
+```ts
+@PrimaryColumn()
+userId: number
+
+@ManyToOne(() => User)
+user: User
+```
+
+Primary column name must match the relation name + join column name on related entity.
+If related entity has multiple primary keys, and you want to point to multiple primary keys,
+you can define multiple primary columns the same way:
+
+```ts
+@PrimaryColumn()
+userFirstName: string
+
+@PrimaryColumn()
+userLastName: string
+
+@ManyToOne(() => User)
+user: User
+```
+
+This change was required to simplify ORM internals and introduce new features.
+
+* prefix relation id columns contained in embedded entities ([#7432](https://github.com/typeorm/typeorm/pull/7432))
+
+* find by Date object in sqlite driver ([#7538](https://github.com/typeorm/typeorm/pull/7538))
+
+* issue with non-reliable `new Date(ISOString)` parsing ([#7796](https://github.com/typeorm/typeorm/pull/7796))
+
+### DEPRECATIONS
+
+* all CLI commands do not support `ormconfig` anymore. You must specify a file with data source instance instead.
+
+* `entities`, `migrations`, `subscribers` options inside `DataSourceOptions` accepting `string` directories support is deprecated.
+You'll be only able to pass entity references in the future versions.
+
+* all container-related features (`UseContainerOptions`, `ContainedType`, `ContainerInterface`, `defaultContainer`,
+`useContainer`, `getFromContainer`) are deprecated.
+
+* EntityManager's `getCustomRepository` used within transactions is deprecated. Use `withRepository` method instead.
+
+* `Connection.isConnected` is deprecated. Use `.isInitialized` instead.
+
+* `select` in `FindOptions` (used in `find*` methods) used as an array of property names is deprecated.
+  Now you should use a new object-literal notation. Example:
+
+Deprecated way of loading entity relations:
+
+```ts
+userRepository.find({
+    select: ["id", "firstName", "lastName"]
+})
+```
+
+New way of loading entity relations:
+
+```ts
+userRepository.find({
+    select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+    }
+})
+```
+
+This change is due to type-safety improvement new `select` signature brings.
+
+* `relations` in `FindOptions` (used in `find*` methods) used as an array of relation names is deprecated.
+  Now you should use a new object-literal notation. Example:
+
+Deprecated way of loading entity relations:
+
+```ts
+userRepository.find({
+    relations: ["contacts", "photos", "photos.album"]
+})
+```
+
+New way of loading entity relations:
+
+```ts
+userRepository.find({
+    relations: {
+        contacts: true,
+        photos: {
+            album: true
+        }
+    }
+})
+```
+
+This change is due to type-safety improvement new `relations` signature brings.
+
+* `join` in `FindOptions` (used in `find*` methods) is deprecated. Use `QueryBuilder` to build queries containing manual joins.
+
+* `Connection`, `ConnectionOptions` are deprecated, new names to use are: `DataSource` and `DataSourceOptions`.
+  To create the same connection you had before use a new syntax: `new DataSource({ /*...*/ })`.
+
+* `createConnection()`, `createConnections()` are deprecated, since `Connection` is called `DataSource` now, to create a connection and connect to the database
+  simply do:
+
+```ts
+const myDataSource = new DataSource({ /*...*/ })
+await myDataSource.connect()
+```
+
+* `getConnection()` is deprecated. To have a globally accessible connection, simply export your data source and use it in places you need it:
+
+```ts
+export const myDataSource = new DataSource({ /*...*/ })
+// now you can use myDataSource anywhere in your application
+```
+
+* `getManager()`, `getMongoManager()`, `getSqljsManager()`, `getRepository()`, `getTreeRepository()`, `getMongoRepository()`, `createQueryBuilder()`
+  are all deprecated now. Use globally accessible data source instead:
+
+```ts
+export const myDataSource = new DataSource({ /*...*/ })
+export const Manager = myDataSource.manager
+export const UserRepository = myDataSource.getRepository(UserEntity)
+export const PhotoRepository = myDataSource.getRepository(PhotoEntity)
+// ...
+```
+
+* `getConnectionManager()` and `ConnectionManager` itself are deprecated - now `Connection` is called `DataSource`,
+  and each data source can be defined in exported variable. If you want to have a collection
+  of data sources, just define them in a variable, simply as:
+
+```ts
+const dataSource1 = new DataSource({ /*...*/ })
+const dataSource2 = new DataSource({ /*...*/ })
+const dataSource3 = new DataSource({ /*...*/ })
+
+export const MyDataSources = {
+    dataSource1,
+    dataSource2,
+    dataSource3,
+}
+```
+
+* `getConnectionOptions()` is deprecated - in next version we are going to implement different mechanism of connection options loading
+
+* `AbstractRepository` is deprecated. Use new way of custom repositories creation.
+
+* `Connection.name` and `BaseConnectionOptions.name` are deprecated. Connections don't need names anymore since we are going to drop all related methods relying on this property.
+
+* all deprecated signatures will be removed in `0.4.0`
+
+### EXPERIMENTAL FEATURES NOT PORTED FROM NEXT BRANCH
+
+* `observers` - we will consider returning them back with new API in future versions
+* `alternative find operators` - using `$any`, `$in`, `$like` and other operators in `where` condition.
+
+## [0.2.45](https://github.com/typeorm/typeorm/compare/0.2.44...0.2.45) (2022-03-04)
+
+### Bug Fixes
+
+* allow clearing database inside a transaction ([#8712](https://github.com/typeorm/typeorm/issues/8712)) ([f3cfdd2](https://github.com/typeorm/typeorm/commit/f3cfdd264105ba8cf1c92832b4b95e5a3ca0ed09)), closes [#8527](https://github.com/typeorm/typeorm/issues/8527)
+* discard duplicated columns on update ([#8724](https://github.com/typeorm/typeorm/issues/8724)) ([0fc093d](https://github.com/typeorm/typeorm/commit/0fc093d168b54a0fd99bb411a730aad9be1858ac)), closes [#8723](https://github.com/typeorm/typeorm/issues/8723)
+* fix entityManager.getId for custom join table ([#8676](https://github.com/typeorm/typeorm/issues/8676)) ([33b2bd7](https://github.com/typeorm/typeorm/commit/33b2bd7acc55d6eb30bfe0681748d6b6abaff0b5)), closes [#7736](https://github.com/typeorm/typeorm/issues/7736)
+* force web bundlers to ignore index.mjs and use the browser ESM version directly ([#8710](https://github.com/typeorm/typeorm/issues/8710)) ([411fa54](https://github.com/typeorm/typeorm/commit/411fa54368c8940e94b1cbf7ab64b8d5377f9406)), closes [#8709](https://github.com/typeorm/typeorm/issues/8709)
+
+### Features
+
+* add nested transaction ([#8541](https://github.com/typeorm/typeorm/issues/8541)) ([6523526](https://github.com/typeorm/typeorm/commit/6523526003bab74a0df8f7d578790c1728b26057)), closes [#1505](https://github.com/typeorm/typeorm/issues/1505)
+* add transformer to ViewColumnOptions ([#8717](https://github.com/typeorm/typeorm/issues/8717)) ([96ac8f7](https://github.com/typeorm/typeorm/commit/96ac8f7eece06ae0a8b52ae7da740c92c0c0d4b9))
+
+## [0.2.44](https://github.com/typeorm/typeorm/compare/0.2.43...0.2.44) (2022-02-23)
+
+### Bug Fixes
+
+* alter relation loader to use transforms when present ([#8691](https://github.com/typeorm/typeorm/issues/8691)) ([2c2fb29](https://github.com/typeorm/typeorm/commit/2c2fb29a67bfd0ca7dd9133a2f85f5b4db5fb195)), closes [#8690](https://github.com/typeorm/typeorm/issues/8690)
+* cannot read properties of undefined (reading 'joinEagerRelations') ([136015b](https://github.com/typeorm/typeorm/commit/136015b04ee72b0ca2439fbff53b1467c12c24b6))
+* expo driver doesn't work properly because of new beforeMigration() afterMigration() callbacks ([#8683](https://github.com/typeorm/typeorm/issues/8683)) ([5a71803](https://github.com/typeorm/typeorm/commit/5a7180378e34ab58ad40c504ebc5195e2413c5f4))
+* ng webpack default import ([#8688](https://github.com/typeorm/typeorm/issues/8688)) ([2d3374b](https://github.com/typeorm/typeorm/commit/2d3374b3b4cb8163764c035bd687b2c81787f338)), closes [#8674](https://github.com/typeorm/typeorm/issues/8674)
+* support imports of absolute paths of ESM files on Windows ([#8669](https://github.com/typeorm/typeorm/issues/8669)) ([12cbfcd](https://github.com/typeorm/typeorm/commit/12cbfcde7bc4f56069ed3298064bb91ad0816bf0)), closes [#8651](https://github.com/typeorm/typeorm/issues/8651)
+
+### Features
+
+* add option to upsert to skip update if the row already exists and no values would be changed  ([#8679](https://github.com/typeorm/typeorm/issues/8679)) ([8744395](https://github.com/typeorm/typeorm/commit/87443954b59768ab77fb15097ea9d88822b4a733))
+* allow `{delete,insert}().returning()` on MariaDB ([#8673](https://github.com/typeorm/typeorm/issues/8673)) ([7facbab](https://github.com/typeorm/typeorm/commit/7facbabd2663098156a53983ea38433ed39082d2)), closes [#7235](https://github.com/typeorm/typeorm/issues/7235) [#7235](https://github.com/typeorm/typeorm/issues/7235)
+* Implement deferrable foreign keys for SAP HANA ([#6104](https://github.com/typeorm/typeorm/issues/6104)) ([1f54c70](https://github.com/typeorm/typeorm/commit/1f54c70b76de34d4420904b72137df746ea9aaed))
+
 ## [0.2.43](https://github.com/typeorm/typeorm/compare/0.2.42...0.2.43) (2022-02-17)
 
 ### Bug Fixes
@@ -508,7 +1367,7 @@
 
 ### Features
 
-* add AWS configurationOptions to aurora-data-api-pg connector ([#6106](https://github.com/typeorm/typeorm/issues/6106)) ([203f51d](https://github.com/typeorm/typeorm/commit/203f51d))
+* add AWS configurationOptions to aurora-postgres connector ([#6106](https://github.com/typeorm/typeorm/issues/6106)) ([203f51d](https://github.com/typeorm/typeorm/commit/203f51d))
 * add better-sqlite3 driver ([#6224](https://github.com/typeorm/typeorm/issues/6224)) ([2241451](https://github.com/typeorm/typeorm/commit/2241451))
 * add postgres connection timeout option ([#6160](https://github.com/typeorm/typeorm/issues/6160)) ([0072149](https://github.com/typeorm/typeorm/commit/0072149))
 * FileLogger accepts custom file path ([#6642](https://github.com/typeorm/typeorm/issues/6642)) ([c99ba40](https://github.com/typeorm/typeorm/commit/c99ba40)), closes [#4410](https://github.com/typeorm/typeorm/issues/4410)
