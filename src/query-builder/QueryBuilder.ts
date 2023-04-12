@@ -116,12 +116,12 @@ export abstract class QueryBuilder<Entity extends ObjectLiteral> {
             this.connection = connectionOrQueryBuilder
             this.queryRunner = queryRunner
             this.expressionMap = new QueryExpressionMap(this.connection)
-
-            this.scope = connectionOrQueryBuilder.scope;
         } else {
             this.connection = connectionOrQueryBuilder.connection
             this.queryRunner = connectionOrQueryBuilder.queryRunner
             this.expressionMap = connectionOrQueryBuilder.expressionMap.clone()
+
+            this.scope = connectionOrQueryBuilder.scope;
         }
     }
 
