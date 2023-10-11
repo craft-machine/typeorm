@@ -44,7 +44,7 @@ export class SoftDeleteQueryBuilder<Entity extends ObjectLiteral>
     /**
      * Gets generated SQL query without parameters being replaced.
      */
-    getQuery(): string {
+    getRawQuery(): string {
         let sql = this.createUpdateExpression()
         sql += this.createCteExpression()
         sql += this.createOrderByExpression()

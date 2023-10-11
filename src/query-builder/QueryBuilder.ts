@@ -45,11 +45,22 @@ import { escapeRegExp } from "../util/escapeRegExp"
  * Allows to build complex sql queries in a fashion way and execute those queries.
  */
 export abstract class QueryBuilder<Entity extends ObjectLiteral> {
+    /**
+     * Desired request scope, to be consumed
+     * by the @Scope decorator
+     */
+    public scope: Object;
+
     readonly "@instanceof" = Symbol.for("QueryBuilder")
 
     // -------------------------------------------------------------------------
     // Public Properties
     // -------------------------------------------------------------------------
+
+    setScope(scope: Object) {
+        this.scope = scope;
+        return this;
+    }
 
     /**
      * Connection on which QueryBuilder was created.
@@ -109,6 +120,7 @@ export abstract class QueryBuilder<Entity extends ObjectLiteral> {
             this.connection = connectionOrQueryBuilder.connection
             this.queryRunner = connectionOrQueryBuilder.queryRunner
             this.expressionMap = connectionOrQueryBuilder.expressionMap.clone()
+            this.scope = connectionOrQueryBuilder.scope;
         }
     }
 
@@ -119,7 +131,41 @@ export abstract class QueryBuilder<Entity extends ObjectLiteral> {
     /**
      * Gets generated SQL query without parameters being replaced.
      */
-    abstract getQuery(): string
+    abstract getRawQuery(): string;
+
+    getQuery(): string {
+        let rawQuery = this.getRawQuery();
+        let scoped = false;
+
+        if (this.expressionMap.subQuery) return "(" + rawQuery + ")";
+
+        this.expressionMap.aliases.forEach((table) => {
+            if (scoped || !table || !table.hasMetadata) return;
+
+            const metadata = table.metadata.tableMetadataArgs;
+            const scope = metadata.scope;
+
+            if (scope) {
+                if (scope.enabled) {
+                    const isSelect = this.expressionMap.queryType === "select";
+                    const hasReturning = this.expressionMap.returning || this.expressionMap.extraReturningColumns.length;
+                    const needsReturning = !isSelect && !hasReturning;
+
+                    if (needsReturning) {
+                        rawQuery += " RETURNING *";
+                    }
+
+                    rawQuery = scope.apply(rawQuery, this.scope, this.expressionMap).trim();
+                } else if (scope.enabled === false) {
+                    scope.enabled = true;
+                }
+
+                scoped = true;
+            }
+        });
+
+        return rawQuery;
+    }
 
     // -------------------------------------------------------------------------
     // Accessors

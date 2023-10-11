@@ -33,7 +33,7 @@ export class InsertQueryBuilder<
     /**
      * Gets generated SQL query without parameters being replaced.
      */
-    getQuery(): string {
+    getRawQuery(): string {
         let sql = this.createComment()
         sql += this.createCteExpression()
         sql += this.createInsertExpression()
