@@ -17,3 +17,14 @@ git fetch upstream
 - Push to a fork
 - Create a PR
 
+
+Use `npm`:
+```bash
+npm install
+
+npm run compile
+npm run package
+
+cd ./build/package
+npm publish
+```
