@@ -7,6 +7,12 @@ import { TableType } from "../metadata/types/TableTypes"
  */
 export interface TableMetadataArgs {
     /**
+     * Metadata about scoping to be applied to
+     * the given table.
+     */
+    scope?: ScopeOptions;
+
+    /**
      * Class to which table is applied.
      * Function target is a table defined in the class.
      * String target is a table defined in a json schema.
